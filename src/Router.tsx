@@ -6,7 +6,6 @@ import TablePlayers from "@/pages/team/TablePlayers";
 import LoginPage from "@/pages/auth/LoginPage";
 import ProtectedRoute from "@/pages/auth/ProtectedRoute";
 import UploadSignatures from "./pages/team/UploadSignatures";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function Router() {
     const queryClient = new QueryClient();
