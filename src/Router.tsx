@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ToastContainer } from "react-toastify";
 import RegisterPlayer from "@/pages/team/RegisterPlayers";
 import TeamLayout from "@/layout/TeamLayout";
 import TablePlayers from "@/pages/team/TablePlayers";
@@ -33,7 +32,6 @@ export default function Router() {
                     </Route>
                 </Routes>
             </BrowserRouter>
-            <ToastContainer closeOnClick hideProgressBar position="bottom-right" theme="colored" />
         </QueryClientProvider>
     );
 }

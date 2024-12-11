@@ -10,8 +10,8 @@ export default function BackGround() {
         >
             <defs>
                 <linearGradient id="gradient" x1="0%" y1="50%" x2="100%" y2="50%">
-                    <stop offset="5%" stopColor="#7bdcb5" />
-                    <stop offset="95%" stopColor="#00d084" />
+                    <stop offset="5%" stopColor="#13b0db" />
+                    <stop offset="95%" stopColor="#0e87a7" />
                 </linearGradient>
             </defs>
 

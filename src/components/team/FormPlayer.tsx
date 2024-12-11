@@ -3,11 +3,18 @@ import type { PlayerInputForm, PlayerResponse } from "@/types/Player";
 import { usePlayer } from "@/context/hooks/usePlayer";
 import { registerPlayer, uploadPDF } from "@/api/team/RegisterPlayer";
 import { useMutation } from "@tanstack/react-query";
-import { ChangeEvent, useEffect } from "react";
-import { toast } from "react-toastify";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useUser } from "@/context/hooks/useUser";
+import { ModalToast } from "../common/ModalToast";
+import { Button, FileInput, Label, TextInput } from "flowbite-react";
+import { HiMiniUserPlus } from "react-icons/hi2";
 
 export default function FormPlayer() {
+    const [modalOpt, setModalOpt] = useState({
+        message: "",
+        isError: false,
+    });
+    const [openModal, setOpenModal] = useState(false);
     const { playerData, setPlayerData } = usePlayer();
     const { userData } = useUser();
 
@@ -36,7 +43,11 @@ export default function FormPlayer() {
     } = useMutation<PlayerResponse, Error, File>({
         mutationFn: uploadPDF,
         onSuccess: (data: PlayerResponse) => {
-            toast.success(data.message);
+            setModalOpt({
+                message: data.message,
+                isError: false,
+            });
+            setOpenModal(true);
             setValue("curp", data.curp);
             setValue("nombre", data.nombre);
             setValue("apellido_paterno", data.apellido_paterno);
@@ -48,17 +59,29 @@ export default function FormPlayer() {
             });
         },
         onError: () => {
-            toast.error("El documento ingresado no es válido.");
+            setModalOpt({
+                message: "El documento ingresado no es válido o es apócrifo",
+                isError: true,
+            });
+            setOpenModal(true);
         },
     });
 
     const { mutate: createPlayer } = useMutation({
         mutationFn: registerPlayer,
         onSuccess: (data) => {
-            toast.success(data.message);
+            setModalOpt({
+                message: data.message,
+                isError: false,
+            });
+            setOpenModal(true);
         },
         onError: (error) => {
-            toast.error(error.message);
+            setModalOpt({
+                message: error.message,
+                isError: true,
+            });
+            setOpenModal(true);
         },
     });
 
@@ -104,81 +127,64 @@ export default function FormPlayer() {
     };
 
     return (
-        <form
-            className="p-12 rounded-xl shadow-lg space-y-5 flex flex-col items-center max-w-lg bg-white"
-            onSubmit={handleSubmit(onSubmit)}
-        >
-            <h1 className="font-roboto text-center mb-5 text-2xl font-extrabold">Formulario de Registro</h1>
-            <div className="form-control w-full">
-                <input
-                    type="file"
-                    accept="application/pdf"
-                    className={`input  input-floating peer ${formValues.curpFile && "is-valid"}`}
-                    onChange={handleFileChange("curpFile")}
-                />
-                <label className="input-floating-label">CURP</label>
-            </div>
-
-            <div className="form-control w-full">
-                <input
-                    type="file"
-                    accept="application/pdf"
-                    className={`input input-floating peer ${formValues.ine && "is-valid"}`}
-                    onChange={handleFileChange("ine")}
-                />
-                <label className="input-floating-label">INE</label>
-            </div>
-
-            <div className="form-control w-full">
-                <input
-                    type="file"
-                    accept="image/png"
-                    className={`input input-floating peer ${formValues.foto && "is-valid"}`}
-                    onChange={handleFileChange("foto")}
-                />
-                <label className="input-floating-label">Foto</label>
-            </div>
-
-            <label className="form-control w-full">
-                <div className="label">
-                    <span className="label-text">CURP</span>
+        <>
+            <form
+                className="p-12 rounded-xl shadow-lg space-y-3 flex flex-col items-center max-w-lg bg-white"
+                onSubmit={handleSubmit(onSubmit)}
+            >
+                <h1 className="font-roboto text-center mb-5 text-2xl font-extrabold">Formulario de Registro</h1>
+                <div className="w-full">
+                    <div className="block">
+                        <Label htmlFor="curp-file" value="CURP" />
+                    </div>
+                    <FileInput id="curp-file" accept="application/pdf" onChange={handleFileChange("curpFile")} />
                 </div>
-                <input type="text" readOnly className="input" {...register("curp")} />
-            </label>
 
-            <label className="form-control w-full">
-                <div className="label">
-                    <span className="label-text">Nombre</span>
+                <div className="w-full">
+                    <div className="block">
+                        <Label htmlFor="ine-file" value="INE" />
+                    </div>
+                    <FileInput id="ine-file" accept="application/pdf" onChange={handleFileChange("ine")} />
                 </div>
-                <input type="text" readOnly className="input" {...register("nombre")} />
-            </label>
+                <div className="w-full">
+                    <div className="block">
+                        <Label htmlFor="foto-file" value="FOTO" />
+                    </div>
+                    <FileInput id="foto-file" accept="image/png" onChange={handleFileChange("foto")} />
+                </div>
 
-            <label className="form-control w-full">
-                <div className="label">
-                    <span className="label-text">Apellido Paterno</span>
+                <div className="w-full">
+                    <Label htmlFor="curp" value="CURP" />
+                    <TextInput id="curp" type="text" {...register("curp")} disabled />
                 </div>
-                <input type="text" readOnly className="input" {...register("apellido_paterno")} />
-            </label>
 
-            <label className="form-control w-full">
-                <div className="label">
-                    <span className="label-text">Apellido Materno</span>
+                <div className="w-full">
+                    <Label htmlFor="nombre" value="Nombre" />
+                    <TextInput id="nombre" type="text" {...register("nombre")} disabled />
                 </div>
-                <input type="text" readOnly className="input" {...register("apellido_materno")} />
-            </label>
 
-            <label className="form-control w-full">
-                <div className="label">
-                    <span className="label-text">Fecha de Nacimiento</span>
+                <div className="w-full">
+                    <Label htmlFor="apellido-p" value="Apellido Paterno" />
+                    <TextInput id="apellido-p" type="text" {...register("apellido_paterno")} disabled />
                 </div>
-                <input type="text" readOnly className="input" {...register("fecha_nacimiento")} />
-            </label>
-            <input
-                type="submit"
-                value="Registrar"
-                className={`btn w-full btn-success${!isFormValid ? "btn-disabled" : ""}`}
-                disabled={!isFormValid}
-            />
-        </form>
+
+                <div className="w-full">
+                    <Label htmlFor="apellido-m" value="Apellido Materno" />
+                    <TextInput id="apellido-m" type="text" {...register("apellido_materno")} disabled />
+                </div>
+
+                <div className="w-full">
+                    <Label htmlFor="fecha-nacimiento" value="Fecha de Nacimiento" />
+                    <TextInput id="fecha-nacimiento" type="text" {...register("fecha_nacimiento")} disabled />
+                </div>
+
+                <Button type="submit" className="w-full" disabled={!isFormValid}>
+                    <HiMiniUserPlus className="mr-3  self-center h-5 w-5" />
+                    Registrar
+                </Button>
+            </form>
+
+            <ModalToast openModal={openModal} setOpenModal={setOpenModal} modalOpt={modalOpt} />
+        </>
     );
 }
