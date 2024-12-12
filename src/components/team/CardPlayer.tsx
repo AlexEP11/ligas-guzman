@@ -6,7 +6,7 @@ export default function CardPlayer() {
     const { userData } = useUser();
 
     return (
-        <div className="flex-col items-center font-defaultgit">
+        <div className="flex-col items-center font-default">
             <h2 className=" text-center mb-5 font-bold text-xl">Previsualización de Credencial</h2>
             <aside
                 className={`p-5 rounded-2xl shadow-md shadow-black/50 border-4 border-black`}
