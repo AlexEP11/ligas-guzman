@@ -132,7 +132,7 @@ export default function FormPlayer() {
                 className="p-12 rounded-xl shadow-lg space-y-3 flex flex-col items-center max-w-lg bg-white"
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <h1 className="font-roboto text-center mb-5 text-2xl font-extrabold">Formulario de Registro</h1>
+                <h1 className="roboto text-center mb-5 text-2xl font-extrabold">Formulario de Registro</h1>
                 <div className="w-full">
                     <div className="block">
                         <Label htmlFor="curp-file" value="CURP" />

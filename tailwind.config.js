@@ -8,6 +8,7 @@ export default {
         extend: {},
         fontFamily: {
             robotoMono: ["Roboto Mono", "sans-serif"],
+            default: ["ui-sans-serif, system-ui, sans-serif"],
         },
     },
     plugins: [flowbite.plugin()],
