@@ -7,22 +7,8 @@ export default function CardPlayer() {
 
     return (
         <div className="flex-col items-center font-default">
-            <h2 className=" text-center mb-5 font-bold text-xl">Previsualización de Credencial</h2>
-            <aside
-                className={`p-5 rounded-2xl shadow-md shadow-black/50 border-4 border-black`}
-                style={{
-                    width: "550px",
-                    height: "360px",
-                    backgroundColor: "white",
-                    backgroundImage: `url('/fondo-tarjeta.png')`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    position: "relative",
-                    overflow: "hidden",
-                    display: "flex",
-                    flexDirection: "column",
-                }}
-            >
+            <h2 className=" text-center mb-5 font-bold font-robotoMono text-xl">Previsualización de Credencial</h2>
+            <aside className="p-5 rounded-2xl shadow-md shadow-black/50 border-4 border-black w-[550px] h-[360px] bg-nv bg-cover bg-center relative overflow-hidden flex flex-col">
                 <h3 className="uppercase text-xs text-center font-bold mb-1">
                     Liga de Veteranos Independientes de Ciudad Guzman
                 </h3>
@@ -75,9 +61,15 @@ export default function CardPlayer() {
                             </p>
                         </div>
                         <p className="uppercase text-xs text-left font-bold mb-2">CURP: {playerData.curp || "???"}</p>
-                        <p className="uppercase text-xs text-left font-bold mb-2">
-                            Años al registro: {playerData.años_registro}{" "}
-                        </p>
+                        <div className="flex items-center justify-between">
+                            <p className="uppercase text-xs text-left font-bold mb-2">
+                                Años al registro: {playerData.años_registro}{" "}
+                            </p>
+                            <p className="uppercase text-xs  font-bold mb-2 mr-2">
+                                Fecha Registro:{" "}
+                                {new Date().toLocaleDateString("es-MX", { timeZone: "America/Mexico_City" })}
+                            </p>
+                        </div>
 
                         <div className="flex flex-col justify-center text-center relative">
                             <img
