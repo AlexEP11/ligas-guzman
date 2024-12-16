@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { useUser } from "@/context/hooks/useUser";
 import { Navbar } from "flowbite-react";
 
-export default function Header() {
-    const { userData } = useUser();
+type NavItems = { label: string; href?: string };
+type HeaderProps = { navItems?: NavItems[]; name: string };
+
+export default function Header({ navItems, name }: HeaderProps) {
     const navigate = useNavigate();
 
     const logout = () => {
@@ -20,9 +21,7 @@ export default function Header() {
         <Navbar fluid rounded>
             <Navbar.Brand href="/registrar/credencial">
                 <img src="/logo.ico" className="mr-3 h-6 sm:h-9" alt="Logo" />
-                <span className="self-center whitespace-nowrap text-lg font-semibold dark:text-white">
-                    {userData.nombre_equipo}
-                </span>
+                <span className="self-center whitespace-nowrap text-lg font-semibold dark:text-white">{name}</span>
             </Navbar.Brand>
             <Navbar.Toggle
                 theme={{
@@ -35,9 +34,14 @@ export default function Header() {
                     list: "lg:flex-row  flex flex-col lg:space-x-8 lg:text-sm lg:font-medium",
                 }}
             >
-                <Navbar.Link href="/registrar/credencial">Registrar Credencial</Navbar.Link>
+                {navItems?.map((item, index) => (
+                    <Navbar.Link key={index} href={item.href}>
+                        {item.label}
+                    </Navbar.Link>
+                ))}
+                {/* <Navbar.Link href="/registrar/credencial">Registrar Credencial</Navbar.Link>
                 <Navbar.Link href="/historial/credenciales">Historial de Credenciales</Navbar.Link>
-                <Navbar.Link href="/subir/firmas">Subir Firmas</Navbar.Link>
+                <Navbar.Link href="/subir/firmas">Subir Firmas</Navbar.Link> */}
                 <Navbar.Link
                     onClick={logout}
                     className="cursor-pointer transition-colors duration-300"

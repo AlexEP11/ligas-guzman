@@ -45,6 +45,8 @@ export default function LoginForm() {
                 navigate("/registrar/credencial");
             } else if (decodedToken?.user_type === "liga") {
                 navigate("/liga-dashboard");
+            } else if (decodedToken?.user_type === "promo") {
+                navigate("/promotoria");
             } else {
                 setModalOpt({
                     message: "Tipo de usuario no reconocido. Contacta al administrador.",
