@@ -36,7 +36,7 @@ export default function SignaturesForm() {
             </div>
             <div>
                 <div className="mb-2 block">
-                    <Label htmlFor="secretario" value="Frimas Secretario" />
+                    <Label htmlFor="secretario" value="Frima Secretario" />
                 </div>
                 <FileInput
                     accept="image/jpeg"
