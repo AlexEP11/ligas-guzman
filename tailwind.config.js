@@ -11,7 +11,6 @@ export default {
             },
         },
         fontFamily: {
-            robotoMono: ["Roboto Mono", "sans-serif"],
             default: ["ui-sans-serif, system-ui, sans-serif"],
         },
     },
