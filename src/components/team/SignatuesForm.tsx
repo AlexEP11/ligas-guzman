@@ -1,30 +1,51 @@
-import formatoPDF from "/Formato Firmas Equipo.pdf";
-import { Button, FileInput, Label, Popover } from "flowbite-react";
+// import formatoPDF from "/Formato Firmas Equipo.pdf";
+// import { FaDownload } from "react-icons/fa6";
+import { Button, FileInput, Label } from "flowbite-react";
 import { useForm } from "react-hook-form";
-import { FaDownload } from "react-icons/fa6";
 import { IoMdCloudUpload } from "react-icons/io";
 import type { Signatures } from "@/types/Common";
 
 export default function SignaturesForm() {
     const initialValue: Signatures = {
-        firmas: null,
+        firmaPresidente: null,
+        firmaSecretario: null,
     };
 
-    const { register, handleSubmit, reset } = useForm({ defaultValues: initialValue });
+    const { register, handleSubmit, reset } = useForm({
+        defaultValues: initialValue,
+    });
 
-    const onSubmit = (e: Signatures) => {};
+    const onSubmit = (e: Signatures) => {
+        console.log(e);
+    };
 
     return (
-        <form className="font-robotoMono space-y-5" onSubmit={handleSubmit(onSubmit)}>
+        <form
+            className="font-robotoMono space-y-5"
+            onSubmit={handleSubmit(onSubmit)}
+        >
             <div>
                 <div className="mb-2 block">
-                    <Label htmlFor="firmas" value="Frimas Equipo" />
+                    <Label htmlFor="presidente" value="Frima Presidente" />
                 </div>
-                <FileInput id="firmas" accept="application/pdf" {...register("firmas")} />
+                <FileInput
+                    accept="image/jpeg"
+                    id="presidente"
+                    {...register("firmaPresidente")}
+                />
             </div>
-            <p></p>
-            <div className="flex items-center justify-between">
-                <Popover
+            <div>
+                <div className="mb-2 block">
+                    <Label htmlFor="secretario" value="Frimas Secretario" />
+                </div>
+                <FileInput
+                    accept="image/jpeg"
+                    id="secretatio"
+                    {...register("firmaSecretario")}
+                />
+            </div>
+            <div className="flex items-center justify-end">
+                {/* <Popover
                     aria-labelledby="default-popover"
                     content={
                         <div className="w-64 text-sm text-gray-500 dark:text-gray-400">
@@ -54,7 +75,7 @@ export default function SignaturesForm() {
                         <FaDownload className="self-center mr-3" />
                         Formato
                     </Button>
-                </Popover>
+                </Popover> */}
                 <Button type="submit" color="success">
                     <IoMdCloudUpload className="self-center mr-3" />
                     Subir Firmas
