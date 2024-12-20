@@ -1,5 +1,5 @@
 import type { TableInfoPlayer } from "@/types/Player";
-import { getAlignmentPDF, getAllPlayers } from "@/api/team/TableInfo";
+import { getAlignmentPDF, getAllPlayers, sendCard } from "@/api/team/TableInfo";
 import { useUser } from "@/context/hooks/useUser";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button, Checkbox, Table } from "flowbite-react";
@@ -23,7 +23,7 @@ export default function TableInfoPlayer() {
         queryKey: ["players"],
     });
 
-    const { mutate } = useMutation({
+    const { mutate: aligmentPDF } = useMutation({
         mutationFn: getAlignmentPDF,
         onSuccess: (data) => {
             // Crear un blob con los datos del PDF
@@ -50,32 +50,68 @@ export default function TableInfoPlayer() {
         },
     });
 
+    const { mutate: credentials } = useMutation({
+        mutationFn: sendCard,
+        onSuccess: (data) => {
+            // Crear un blob con los datos del PDF
+            const blob = new Blob([data], { type: "application/pdf" });
+
+            // Crear una URL para el blob
+            const url = window.URL.createObjectURL(blob);
+
+            // Crear un enlace para descargar el archivo
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `Credenciales ${userData.nombre_equipo}.pdf`; // Nombre del archivo descargado
+            document.body.appendChild(a);
+            a.click(); // Activar la descarga
+            document.body.removeChild(a); // Eliminar el enlace
+            window.URL.revokeObjectURL(url); // Limpiar la URL
+        },
+    });
+
     useEffect(() => {
         setSelectAll(selectedPlayers.length === players.length);
     }, [selectedPlayers, players.length]);
 
     const handlePlayerSelect = (playerId: number) => {
         setSelectedPlayers((prevSelected) =>
-            prevSelected.includes(playerId) ? prevSelected.filter((id) => id !== playerId) : [...prevSelected, playerId]
+            prevSelected.includes(playerId)
+                ? prevSelected.filter((id) => id !== playerId)
+                : [...prevSelected, playerId]
         );
     };
 
     const handleSelectAllChange = () => {
-        setSelectedPlayers(selectAll ? [] : players.map((player: TableInfoPlayer) => player.id_jugador));
+        setSelectedPlayers(
+            selectAll
+                ? []
+                : players.map((player: TableInfoPlayer) => player.id_jugador)
+        );
         setSelectAll(!selectAll);
     };
 
-    const handleOnClick = () => {
-        mutate();
+    const handleCredentials = () => {
+        credentials(selectedPlayers);
+    };
+
+    const handleAligment = () => {
+        aligmentPDF(selectedPlayers);
     };
 
     return (
         <>
             <div className="overflow-x-auto rounded-lg shadow-sm bg-white space-y-5">
                 <Table hoverable theme={{ body: { base: "text-sm" } }}>
-                    <Table.Head className="text-center text-white" theme={{ cell: { base: "bg-[#155e75]" } }}>
+                    <Table.Head
+                        className="text-center text-white"
+                        theme={{ cell: { base: "bg-[#155e75]" } }}
+                    >
                         <Table.HeadCell className="p-4">
-                            <Checkbox checked={selectAll} onChange={handleSelectAllChange} />
+                            <Checkbox
+                                checked={selectAll}
+                                onChange={handleSelectAllChange}
+                            />
                         </Table.HeadCell>
 
                         <Table.HeadCell>Carnet</Table.HeadCell>
@@ -91,8 +127,14 @@ export default function TableInfoPlayer() {
                                 <Table.Cell className="p-4">
                                     <Checkbox
                                         value={player.id_jugador}
-                                        checked={selectedPlayers.includes(player.id_jugador)}
-                                        onChange={() => handlePlayerSelect(player.id_jugador)}
+                                        checked={selectedPlayers.includes(
+                                            player.id_jugador
+                                        )}
+                                        onChange={() =>
+                                            handlePlayerSelect(
+                                                player.id_jugador
+                                            )
+                                        }
                                     />
                                 </Table.Cell>
                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
@@ -107,22 +149,36 @@ export default function TableInfoPlayer() {
                     </Table.Body>
                 </Table>
                 <p className="text-sm p-5">
-                    Mostrando <span className="font-bold">{players.length}</span> jugadores
+                    Mostrando{" "}
+                    <span className="font-bold">{players.length}</span>{" "}
+                    jugadores
                 </p>
             </div>
             <div className="mt-5 flex items-center justify-center md:justify-end">
                 <div className="flex gap-5">
-                    <Button color="purple" onClick={handleOnClick}>
+                    <Button
+                        color="purple"
+                        onClick={handleAligment}
+                        disabled={selectedPlayers.length === 0}
+                    >
                         <IoNewspaperOutline className="self-center mr-3" />
                         Generar Alineacion
                     </Button>
-                    <Button color="info" disabled={selectedPlayers.length === 0}>
+                    <Button
+                        color="info"
+                        disabled={selectedPlayers.length === 0}
+                        onClick={handleCredentials}
+                    >
                         <FaRegAddressCard className="self-center mr-3" />
                         Generar Credenciales
                     </Button>
                 </div>
             </div>
-            <ModalToast setOpenModal={setOpenModal} openModal={openModal} modalOpt={modalOpt} />
+            <ModalToast
+                setOpenModal={setOpenModal}
+                openModal={openModal}
+                modalOpt={modalOpt}
+            />
         </>
     );
 }
