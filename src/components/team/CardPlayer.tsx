@@ -95,7 +95,7 @@ export default function CardPlayer() {
                         </div>
 
                         <div className="flex flex-col justify-center text-center relative">
-                            <img
+                            {/* <img
                                 src="/firma-presidente.png"
                                 alt=""
                                 className="absolute left-5 bottom-0 h-16 w-32 z-10"
@@ -105,7 +105,7 @@ export default function CardPlayer() {
                                 src="/firma-secretario.png"
                                 alt=""
                                 className="absolute right-8 bottom-1 h-14 w-28 z-10"
-                            />
+                            /> */}
 
                             <div className="flex justify-around mt-10">
                                 <p className="uppercase text-xs text-left font-bold">
