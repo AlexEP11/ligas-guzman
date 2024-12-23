@@ -8,8 +8,8 @@ export default function CardPlayer() {
     const { userData } = useUser();
 
     return (
-        <div className="flex-col items-center font-default">
-            <h2 className=" text-center mb-5 font-bold font-robotoMono text-xl">
+        <div className="flex-col items-center justify-center font-default">
+            <h2 className=" text-center mb-5 font-extrabold text-2xl uppercase text-white">
                 Previsualización de Credencial
             </h2>
             <aside className="p-5 rounded-2xl shadow-md shadow-black/50 border-4 border-black w-[550px] h-[360px] bg-nv bg-cover bg-center relative overflow-hidden flex flex-col">
@@ -95,18 +95,6 @@ export default function CardPlayer() {
                         </div>
 
                         <div className="flex flex-col justify-center text-center relative">
-                            {/* <img
-                                src="/firma-presidente.png"
-                                alt=""
-                                className="absolute left-5 bottom-0 h-16 w-32 z-10"
-                            />
-
-                            <img
-                                src="/firma-secretario.png"
-                                alt=""
-                                className="absolute right-8 bottom-1 h-14 w-28 z-10"
-                            /> */}
-
                             <div className="flex justify-around mt-10">
                                 <p className="uppercase text-xs text-left font-bold">
                                     Presidente Equipo
@@ -127,7 +115,13 @@ export default function CardPlayer() {
                     </div>
                 </div>
             </aside>
-            <Alert icon={HiInformationCircle} color="info" className="mt-5">
+            <Alert
+                icon={HiInformationCircle}
+                theme={{
+                    color: { info: "bg-[#131e3b]/50" },
+                }}
+                className="mt-5 rounded-2xl text-white"
+            >
                 <span className="font-bold text-lg">
                     Esta previsualización puede variar respecto a la credencial
                     final

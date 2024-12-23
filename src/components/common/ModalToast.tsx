@@ -1,4 +1,6 @@
 import { Button } from "flowbite-react";
+import { CgDanger } from "react-icons/cg";
+import { FaRegCheckCircle } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 type ModalToastProps = {
@@ -10,11 +12,16 @@ type ModalToastProps = {
     setOpenModal: (open: boolean) => void;
 };
 
-export function ModalToast({ modalOpt: { message, isError = false }, openModal, setOpenModal }: ModalToastProps) {
+export function ModalToast({
+    modalOpt: { message, isError = false },
+    openModal,
+    setOpenModal,
+}: ModalToastProps) {
     return (
         <AnimatePresence>
             {openModal && (
                 <>
+                    {/* Fondo semitransparente para el modal */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 0.5 }}
@@ -24,6 +31,8 @@ export function ModalToast({ modalOpt: { message, isError = false }, openModal, 
                         aria-hidden="true"
                         onClick={() => setOpenModal(false)} // Cerrar modal al hacer clic fuera
                     />
+
+                    {/* Modal */}
                     <motion.div
                         initial={{ opacity: 0, y: -50 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -34,29 +43,66 @@ export function ModalToast({ modalOpt: { message, isError = false }, openModal, 
                         aria-labelledby="modal-title"
                         aria-describedby="modal-description"
                     >
-                        <div className="max-w-sm rounded-lg bg-white shadow-lg dark:bg-gray-800">
+                        <div className="max-w-sm w-full rounded-3xl p-8 bg-white shadow-lg">
+                            {/* Icono */}
+                            <div className="flex items-center justify-center mb-5">
+                                <div
+                                    className={`rounded-full p-2  ${
+                                        isError
+                                            ? "bg-red-600/20"
+                                            : "bg-[#1580AD]/20"
+                                    }`}
+                                >
+                                    {isError ? (
+                                        <CgDanger className="h-10 w-10 text-red-600" />
+                                    ) : (
+                                        <FaRegCheckCircle className="h-10 w-10 text-[#1580AD]" />
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Título */}
                             <div
-                                className={`flex justify-between items-center p-5 border-b ${
-                                    isError ? "border-red-600 text-red-600" : "border-blue-600  text-blue-600"
+                                className={`flex justify-center items-center ${
+                                    isError ? "text-red-600" : "text-[#1580AD]"
                                 }`}
                                 id="modal-title"
                             >
-                                <h3 className="text-lg font-medium">
-                                    {isError ? "Operación inválida" : "Operación exitosa"}
+                                <h3 className="text-2xl font-semibold text-center">
+                                    {isError
+                                        ? "Operación inválida"
+                                        : "Operación exitosa"}
                                 </h3>
-                                <button
-                                    className="text-gray-500 hover:text-gray-800"
-                                    onClick={() => setOpenModal(false)}
+                            </div>
+
+                            {/* Mensaje */}
+                            <div className="mt-4" id="modal-description">
+                                <p className="text-gray-600 font-medium text-lg">
+                                    {message}
+                                </p>
+                            </div>
+
+                            {/* Botón de Cerrar */}
+                            <div className="flex justify-end mt-4">
+                                <motion.div
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
-                                    ✕
-                                </button>
-                            </div>
-                            <div className="p-5" id="modal-description">
-                                <p className="text-gray-700 dark:text-gray-300">{message}</p>
-                            </div>
-                            <div className="flex justify-end p-4 border-t dark:border-gray-700">
-                                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                                    <Button onClick={() => setOpenModal(false)} color={isError ? "failure" : "info"}>
+                                    <Button
+                                        onClick={() => setOpenModal(false)}
+                                        theme={{
+                                            color: isError
+                                                ? {
+                                                      failure:
+                                                          "bg-red-600 hover:bg-red-700",
+                                                  }
+                                                : {
+                                                      info: "bg-[#1580AD] hover:bg-[#126385]",
+                                                  },
+                                        }}
+                                        color={isError ? "failure" : "info"}
+                                        className="rounded-md font-bold text-white"
+                                    >
                                         Cerrar
                                     </Button>
                                 </motion.div>

@@ -139,7 +139,7 @@ export default function FormPlayer() {
                 className="p-12 rounded-xl shadow-lg space-y-3 flex flex-col items-center max-w-lg bg-white"
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <h1 className="roboto text-center mb-5 text-2xl font-extrabold">
+                <h1 className="text-center mb-5 text-2xl font-extrabold uppercase">
                     Formulario de Registro
                 </h1>
                 <div className="w-full">
@@ -229,10 +229,13 @@ export default function FormPlayer() {
 
                 <Button
                     type="submit"
-                    className="w-full"
+                    className="w-full font-bold text-white"
                     disabled={!isFormValid}
+                    theme={{
+                        color: { info: "bg-[#1580AD] hover:bg-[#126385]" },
+                    }}
                 >
-                    <HiMiniUserPlus className="mr-3  self-center h-5 w-5" />
+                    <HiMiniUserPlus className="mr-3 text-white self-center h-5 w-5" />
                     Registrar
                 </Button>
             </form>

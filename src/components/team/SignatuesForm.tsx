@@ -26,7 +26,11 @@ export default function SignaturesForm() {
         >
             <div>
                 <div className="mb-2 block">
-                    <Label htmlFor="presidente" value="Frima Presidente" />
+                    <Label
+                        htmlFor="presidente"
+                        value="Frima Presidente"
+                        className="font-bold"
+                    />
                 </div>
                 <FileInput
                     accept="image/jpeg"
@@ -36,7 +40,11 @@ export default function SignaturesForm() {
             </div>
             <div>
                 <div className="mb-2 block">
-                    <Label htmlFor="secretario" value="Frima Secretario" />
+                    <Label
+                        htmlFor="secretario"
+                        value="Frima Secretario"
+                        className="font-bold"
+                    />
                 </div>
                 <FileInput
                     accept="image/jpeg"
@@ -45,38 +53,7 @@ export default function SignaturesForm() {
                 />
             </div>
             <div className="flex items-center justify-end">
-                {/* <Popover
-                    aria-labelledby="default-popover"
-                    content={
-                        <div className="w-64 text-sm text-gray-500 dark:text-gray-400">
-                            <div className="border-b border-gray-200 bg-gray-100 px-3 py-2 dark:border-gray-600 dark:bg-gray-700">
-                                <h3 id="default-popover" className="font-semibold text-gray-900 dark:text-white">
-                                    Descargar Formato
-                                </h3>
-                            </div>
-                            <div className="px-3 py-2">
-                                <p>
-                                    Si no cuenta con el formato de llenado para las firmas puede descargarlo dando clic{" "}
-                                    <a
-                                        href={formatoPDF}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        download="Formato Firmas Equipo.pdf"
-                                        className="hover:cursor-pointer text-red-600 underline"
-                                    >
-                                        aqui
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                    }
-                >
-                    <Button color="purple">
-                        <FaDownload className="self-center mr-3" />
-                        Formato
-                    </Button>
-                </Popover> */}
-                <Button type="submit" color="success">
+                <Button type="submit" className="font-bold" color="success">
                     <IoMdCloudUpload className="self-center mr-3" />
                     Subir Firmas
                 </Button>

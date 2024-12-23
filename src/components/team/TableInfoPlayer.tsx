@@ -101,11 +101,11 @@ export default function TableInfoPlayer() {
 
     return (
         <>
-            <div className="overflow-x-auto rounded-lg shadow-sm bg-white space-y-5">
+            <div className="overflow-x-auto rounded-lg shadow-sm shadow-white bg-white space-y-5">
                 <Table hoverable theme={{ body: { base: "text-sm" } }}>
                     <Table.Head
                         className="text-center text-white"
-                        theme={{ cell: { base: "bg-[#155e75]" } }}
+                        theme={{ cell: { base: "bg-[#1580AD]" } }}
                     >
                         <Table.HeadCell className="p-4">
                             <Checkbox
@@ -137,7 +137,7 @@ export default function TableInfoPlayer() {
                                         }
                                     />
                                 </Table.Cell>
-                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900">
                                     {player.carnet}
                                 </Table.Cell>
                                 <Table.Cell>{player.nombre}</Table.Cell>
@@ -154,9 +154,10 @@ export default function TableInfoPlayer() {
                     jugadores
                 </p>
             </div>
-            <div className="mt-5 flex items-center justify-center md:justify-end">
-                <div className="flex gap-5">
+            <div className="mt-5 flex items-center justify-center md:justify-end mb-5">
+                <div className="flex gap-5 text-white">
                     <Button
+                        className="font-bold"
                         color="purple"
                         onClick={handleAligment}
                         disabled={selectedPlayers.length === 0}
@@ -165,7 +166,10 @@ export default function TableInfoPlayer() {
                         Generar Alineacion
                     </Button>
                     <Button
-                        color="info"
+                        className="font-bold"
+                        theme={{
+                            color: { info: "bg-[#1580AD] hover:bg-[#126385]" },
+                        }}
                         disabled={selectedPlayers.length === 0}
                         onClick={handleCredentials}
                     >

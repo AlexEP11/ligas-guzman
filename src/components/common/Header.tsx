@@ -2,9 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { Navbar } from "flowbite-react";
 
 type NavItems = { label: string; href?: string };
-type HeaderProps = { navItems?: NavItems[]; name: string };
+type HeaderProps = { navItems?: NavItems[]; name: string; linkIcon: string };
 
-export default function Header({ navItems, name }: HeaderProps) {
+export default function Header({ navItems, name, linkIcon }: HeaderProps) {
     const navigate = useNavigate();
 
     const logout = () => {
@@ -18,15 +18,21 @@ export default function Header({ navItems, name }: HeaderProps) {
     };
 
     return (
-        <Navbar fluid rounded>
-            <Navbar.Brand href="/registrar/credencial">
-                <img src="/logo.ico" className="mr-3 h-6 sm:h-9" alt="Logo" />
-                <span className="self-center whitespace-nowrap text-lg font-semibold dark:text-white">{name}</span>
+        <Navbar fluid rounded className="bg-[#0e080a] ">
+            <Navbar.Brand
+                href={linkIcon}
+                className="hover:scale-105 transition-transform duration-300"
+            >
+                <img src="/logo.ico" className="mr-3 h-6 sm:h-9 " alt="Logo" />
+                <span className="self-center whitespace-nowrap text-lg font-bold text-white">
+                    {name}
+                </span>
             </Navbar.Brand>
             <Navbar.Toggle
                 theme={{
                     base: "lg:hidden ",
                 }}
+                className="bg-white p-2 rounded-md "
             />
             <Navbar.Collapse
                 theme={{
@@ -35,17 +41,25 @@ export default function Header({ navItems, name }: HeaderProps) {
                 }}
             >
                 {navItems?.map((item, index) => (
-                    <Navbar.Link key={index} href={item.href}>
+                    <Navbar.Link
+                        key={index}
+                        href={item.href}
+                        className="text-white font-bold text-lg transition-colors duration-300 ease-linear"
+                        theme={{
+                            active: { off: "md:hover:text-[#1580AD]" },
+                        }}
+                    >
                         {item.label}
                     </Navbar.Link>
                 ))}
-                {/* <Navbar.Link href="/registrar/credencial">Registrar Credencial</Navbar.Link>
-                <Navbar.Link href="/historial/credenciales">Historial de Credenciales</Navbar.Link>
-                <Navbar.Link href="/subir/firmas">Subir Firmas</Navbar.Link> */}
                 <Navbar.Link
                     onClick={logout}
-                    className="cursor-pointer transition-colors duration-300"
-                    theme={{ active: { off: "text-red-500 font-bold hover:text-red-600 " } }}
+                    className="cursor-pointer transition-colors duration-300 text-lg"
+                    theme={{
+                        active: {
+                            off: "text-red-500 font-bold hover:text-red-700 ",
+                        },
+                    }}
                 >
                     Cerrar Sesión
                 </Navbar.Link>

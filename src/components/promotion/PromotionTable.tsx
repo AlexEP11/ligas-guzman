@@ -68,7 +68,11 @@ export default function PromotionTable() {
             {/* Input de búsqueda */}
             <div className="max-w-md mb-4">
                 <div className="mb-2 block">
-                    <Label htmlFor="search" value="Buscar por:" />
+                    <Label
+                        htmlFor="search"
+                        value="Buscar por:"
+                        className="font-bold text-white"
+                    />
                 </div>
                 <TextInput
                     id="search"
@@ -82,7 +86,10 @@ export default function PromotionTable() {
             {/* Tabla de jugadores */}
             <div className="overflow-x-auto rounded-lg shadow-sm bg-white space-y-5">
                 <Table hoverable theme={{ body: { base: "text-sm" } }}>
-                    <Table.Head className="text-center text-white" theme={{ cell: { base: "bg-[#155e75] p-4" } }}>
+                    <Table.Head
+                        className="text-center text-white"
+                        theme={{ cell: { base: "bg-[#1580AD] p-4" } }}
+                    >
                         <Table.HeadCell>Carnet</Table.HeadCell>
                         <Table.HeadCell>Nombre</Table.HeadCell>
                         <Table.HeadCell>CURP</Table.HeadCell>
@@ -103,7 +110,10 @@ export default function PromotionTable() {
                         ))}
                         {filteredPlayers.length === 0 && (
                             <Table.Row>
-                                <Table.Cell colSpan={5} className="text-center py-4">
+                                <Table.Cell
+                                    colSpan={5}
+                                    className="text-center py-4"
+                                >
                                     No se encontraron resultados
                                 </Table.Cell>
                             </Table.Row>

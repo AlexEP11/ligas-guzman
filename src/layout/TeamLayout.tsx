@@ -16,7 +16,11 @@ export default function TeamLayout() {
                 <BackGround />
 
                 <main className="relative z-10">
-                    <Header navItems={navItems} name={userData.nombre_equipo} />
+                    <Header
+                        navItems={navItems}
+                        name={userData.nombre_equipo}
+                        linkIcon="/registrar/credencial"
+                    />
                     <section className="container max-w-screen-xl mx-auto mt-10 md:mb-10">
                         <Outlet />
                     </section>
