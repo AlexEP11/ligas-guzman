@@ -9,6 +9,7 @@ export type User = {
     equipo_id: number;
     n_categoria: number;
     categoria: string;
+    liga: string;
 };
 
 export type DecodedToken = {
@@ -17,4 +18,5 @@ export type DecodedToken = {
     nombre_equipo?: string;
     categoria?: string;
     n_categoria?: number;
+    liga?: string;
 };

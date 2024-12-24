@@ -8,6 +8,8 @@ import ProtectedRoute from "@/pages/auth/ProtectedRoute";
 import UploadSignatures from "./pages/team/UploadSignatures";
 import PromotionLayout from "./layout/PromotionLayout";
 import PromotionPage from "./pages/promotion/PromotionPage";
+import LeaguePage from "./pages/league/LeaguePage";
+import LeagueLayout from "./layout/LeagueLayout";
 
 export default function Router() {
     const queryClient = new QueryClient();
@@ -27,9 +29,30 @@ export default function Router() {
                             </ProtectedRoute>
                         }
                     >
-                        <Route element={<RegisterPlayer />} index path="/registrar/credencial" />
-                        <Route element={<TablePlayers />} path="/historial/credenciales" />
-                        <Route element={<UploadSignatures />} path="/subir/firmas" />
+                        <Route
+                            element={<RegisterPlayer />}
+                            index
+                            path="/registrar/credencial"
+                        />
+                        <Route
+                            element={<TablePlayers />}
+                            path="/historial/credenciales"
+                        />
+                        <Route
+                            element={<UploadSignatures />}
+                            path="/subir/firmas"
+                        />
+                    </Route>
+
+                    {/* Ruta de ligas */}
+                    <Route
+                        element={
+                            <ProtectedRoute>
+                                <LeagueLayout />
+                            </ProtectedRoute>
+                        }
+                    >
+                        <Route element={<LeaguePage />} index path="/liga" />
                     </Route>
 
                     {/* Ruta de promotoria */}
@@ -40,7 +63,11 @@ export default function Router() {
                             </ProtectedRoute>
                         }
                     >
-                        <Route element={<PromotionPage />} index path="/promotoria" />
+                        <Route
+                            element={<PromotionPage />}
+                            index
+                            path="/promotoria"
+                        />
                     </Route>
                 </Routes>
             </BrowserRouter>

@@ -25,8 +25,12 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
         // Define las rutas permitidas por tipo de usuario
         const routesByUserType: Record<string, string[]> = {
-            equipo: ["/registrar/credencial", "/historial/credenciales", "/subir/firmas"],
-            liga: ["/liga-dashboard"],
+            equipo: [
+                "/registrar/credencial",
+                "/historial/credenciales",
+                "/subir/firmas",
+            ],
+            liga: ["/liga"],
             promo: ["/promotoria"],
         };
 

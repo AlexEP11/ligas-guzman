@@ -15,9 +15,10 @@ export const UserContext = createContext<UserContextType>(null!);
 
 export const UserProvider = ({ children }: UserProviderProps) => {
     const [userData, setUserData] = useState<User>({
-        user_type: "Usuario desconocido",
+        user_type: "Usuario Desconocido",
         nombre_equipo: "Equipo Desconocido",
-        categoria: "Categoría desconocida",
+        categoria: "Categoría Desconocida",
+        liga: "Liga Desconocida",
         equipo_id: -1,
         n_categoria: 0,
     });
@@ -30,11 +31,14 @@ export const UserProvider = ({ children }: UserProviderProps) => {
                 // Verificar si el token tiene el formato correcto
                 const tokenParts = token.split(".");
                 if (tokenParts.length === 3) {
-                    const decoded: DecodedToken = jwtDecode<DecodedToken>(token);
+                    const decoded: DecodedToken =
+                        jwtDecode<DecodedToken>(token);
                     return {
-                        user_type: decoded.user_type || "Usuario desconocido",
-                        nombre_equipo: decoded.nombre_equipo || "Equipo Desconocido",
-                        categoria: decoded.categoria || "Categoría desconocida",
+                        user_type: decoded.user_type || "Usuario Desconocido",
+                        nombre_equipo:
+                            decoded.nombre_equipo || "Equipo Desconocido",
+                        liga: decoded.liga || "Liga Desconocida",
+                        categoria: decoded.categoria || "Categoría Desconocida",
                         equipo_id: decoded.equipo_id || -1,
                         n_categoria: decoded.n_categoria || 0,
                     };
@@ -48,9 +52,10 @@ export const UserProvider = ({ children }: UserProviderProps) => {
             }
         }
         return {
-            user_type: "Usuario desconocido",
+            user_type: "Usuario Desconocido",
             nombre_equipo: "Equipo Desconocido",
-            categoria: "Categoría desconocida",
+            liga: "Liga Desconocida",
+            categoria: "Categoría Desconocida",
             n_categoria: 0,
             equipo_id: -1,
         };
@@ -74,5 +79,9 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         };
     }, []);
 
-    return <UserContext.Provider value={{ userData, setUserData }}>{children}</UserContext.Provider>;
+    return (
+        <UserContext.Provider value={{ userData, setUserData }}>
+            {children}
+        </UserContext.Provider>
+    );
 };
