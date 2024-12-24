@@ -82,7 +82,7 @@ export default function SignaturesForm() {
                     </div>
                     <FileInput
                         accept="image/jpeg, image/png, image/jpg"
-                        id="secretatio"
+                        id="secretario"
                         {...register("secretario")}
                     />
                 </div>
