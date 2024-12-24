@@ -2,8 +2,8 @@ import PromotionTable from "@/components/promotion/PromotionTable";
 
 export default function PromotionPage() {
     return (
-        <section className="">
+        <main>
             <PromotionTable />
-        </section>
+        </main>
     );
 }
