@@ -1,4 +1,6 @@
 import SiganturesForm from "@/components/team/SignatuesForm";
+import { Alert } from "flowbite-react";
+import { HiInformationCircle } from "react-icons/hi";
 
 export default function UploadSignatures() {
     return (
@@ -9,6 +11,17 @@ export default function UploadSignatures() {
                 </h1>
                 <SiganturesForm />
             </article>
+            <Alert
+                icon={HiInformationCircle}
+                theme={{
+                    color: { info: "bg-[#131e3b]/90" },
+                }}
+                className="mt-5 rounded-2xl text-white"
+            >
+                <span className="font-bold text-lg">
+                    Los formatos validos son: PNG, JPG y JPEG
+                </span>
+            </Alert>
         </section>
     );
 }

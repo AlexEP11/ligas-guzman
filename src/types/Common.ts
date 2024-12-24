@@ -1,4 +1,4 @@
 export type Signatures = {
-    firmaPresidente: File | null;
-    firmaSecretario: File | null;
+    presidente: FileList | null;
+    secretario: FileList | null;
 };
