@@ -127,7 +127,6 @@ export default function FormPlayer() {
         };
 
     const onSubmit = (data: PlayerInputForm) => {
-        console.log("Formulario enviado:", data);
         createPlayer(data);
         resetPDF();
         reset();
@@ -169,7 +168,7 @@ export default function FormPlayer() {
                     </div>
                     <FileInput
                         id="foto-file"
-                        accept="image/*"
+                        accept="image/jpeg, image/png, image/jpg"
                         onChange={handleFileChange("foto")}
                     />
                 </div>
