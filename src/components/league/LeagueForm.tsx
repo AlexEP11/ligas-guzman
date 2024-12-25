@@ -1,11 +1,13 @@
 import { Button, FileInput, Label } from "flowbite-react";
-import { useForm } from "react-hook-form";
-import { IoMdCloudUpload } from "react-icons/io";
 import type { Signatures } from "@/types/Common";
+import { IoMdCloudUpload } from "react-icons/io";
+import { useMutation } from "@tanstack/react-query";
 import { ModalToast } from "../common/ModalToast";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import LogoPrev from "./LogoPrev";
+import { postSignatures } from "@/api/team/Signatures";
+import { postLogo } from "@/api/league/FormLeague";
 
 export default function LeagueForm() {
     const [modalOpt, setModalOpt] = useState({
@@ -29,28 +31,46 @@ export default function LeagueForm() {
         (value) => value !== null
     );
 
-    // // Llamada a endpoint
-    // const { mutate: uploadSignatures } = useMutation({
-    //     mutationFn: postSignatures,
-    //     onSuccess: (data) => {
-    //         setModalOpt({
-    //             message: data.message,
-    //             isError: false,
-    //         });
-    //         setOpenModal(true);
-    //         reset();
-    //     },
-    //     onError: () => {
-    //         setModalOpt({
-    //             message: "Error al guardar la imagen",
-    //             isError: true,
-    //         });
-    //         setOpenModal(true);
-    //     },
-    // });
+    // Llamada a endpoint de subir firmas
+    const { mutate: uploadSignatures } = useMutation({
+        mutationFn: postSignatures,
+        onSuccess: () => {
+            uploadLogo(formValues.logo!);
+        },
+        onError: () => {
+            setModalOpt({
+                message: "Error al guardar las firmas",
+                isError: true,
+            });
+            setOpenModal(true);
+        },
+    });
+
+    // Llamada al endpoint de subir logo
+    const { mutate: uploadLogo } = useMutation({
+        mutationFn: postLogo,
+        onSuccess: () => {
+            setModalOpt({
+                message: "Información guardada correctamente",
+                isError: false,
+            });
+            setOpenModal(true);
+            reset();
+        },
+        onError: () => {
+            setModalOpt({
+                message: "Error al guardar el logo",
+                isError: true,
+            });
+            setOpenModal(true);
+        },
+    });
 
     const onSubmit = (data: Signatures) => {
-        console.log(data);
+        uploadSignatures({
+            presidente: data.presidente,
+            secretario: data.secretario,
+        });
     };
 
     return (

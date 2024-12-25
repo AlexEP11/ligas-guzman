@@ -35,8 +35,9 @@ export default function LoginForm() {
             setUserData({
                 nombre_equipo:
                     decodedToken.nombre_equipo ?? "Equipo Desconocido",
-                user_type: decodedToken.user_type ?? "Usuario desconocido",
-                categoria: decodedToken.categoria ?? "Categoría desconocida",
+                user_type: decodedToken.user_type ?? "Usuario Desconocido",
+                liga: decodedToken.liga ?? "Liga Desconocida",
+                categoria: decodedToken.categoria ?? "Categoría Desconocida",
                 equipo_id: decodedToken.equipo_id ?? -1,
                 n_categoria: decodedToken.n_categoria ?? -1,
             });
@@ -45,7 +46,7 @@ export default function LoginForm() {
             if (decodedToken?.user_type === "equipo") {
                 navigate("/registrar/credencial");
             } else if (decodedToken?.user_type === "liga") {
-                navigate("/liga-dashboard");
+                navigate("/liga");
             } else if (decodedToken?.user_type === "promo") {
                 navigate("/promotoria");
             } else {
