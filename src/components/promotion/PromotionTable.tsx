@@ -1,86 +1,80 @@
-import { Table, TextInput, Label } from "flowbite-react";
+import { Table, TextInput, Label, Checkbox, Button } from "flowbite-react";
+import { getAllPlayersPromo } from "@/api/promo/PromoTable";
+import { FaUserCircle } from "react-icons/fa";
+import { PlayerPromo } from "@/types/Player";
+import { FaFilePdf } from "react-icons/fa6";
+import { FaIdCard } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 export default function PromotionTable() {
-    // Ejemplo de datos para los jugadores con liga y equipo
-    const players = [
-        {
-            id_jugador: 1,
-            carnet: "A001",
-            nombre: "Erling Haaland",
-            curp: "HALE000101MDFRLR09",
-            edad: 23,
-            liga: "Premier League",
-            equipo: "Manchester City",
-        },
-        {
-            id_jugador: 2,
-            carnet: "A002",
-            nombre: "Karim Benzema",
-            curp: "BENK881219HDFRNL01",
-            edad: 35,
-            liga: "La Liga",
-            equipo: "Real Madrid",
-        },
-        {
-            id_jugador: 3,
-            carnet: "A003",
-            nombre: "Lionel Messi",
-            curp: "MESS870624MDFRLR03",
-            edad: 36,
-            liga: "Ligue 1",
-            equipo: "PSG",
-        },
-        {
-            id_jugador: 4,
-            carnet: "A004",
-            nombre: "Kevin De Bruyne",
-            curp: "DEBK911028MDFRLR04",
-            edad: 32,
-            liga: "Premier League",
-            equipo: "Manchester City",
-        },
-        {
-            id_jugador: 5,
-            carnet: "A005",
-            nombre: "Kylian Mbappé",
-            curp: "MBAP980120MDFRLR05",
-            edad: 25,
-            liga: "Ligue 1",
-            equipo: "PSG",
-        },
-    ];
+    const [selectedPlayers, setSelectedPlayers] = useState<number[]>([]);
 
     // Estado para el término de búsqueda
     const [searchTerm, setSearchTerm] = useState("");
 
+    const { data } = useQuery<PlayerPromo[]>({
+        queryFn: getAllPlayersPromo,
+        queryKey: ["promotoriaAll"],
+    });
+
     // Filtrado de jugadores basado en la búsqueda
-    const filteredPlayers = players.filter(
+    const filteredPlayers = (data || []).filter(
         (player) =>
-            player.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            player.liga.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            player.equipo.toLowerCase().includes(searchTerm.toLowerCase())
+            player.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            player.liga?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            player.equipo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            player.fecha_registro
+                ?.toLowerCase()
+                .includes(searchTerm.toLowerCase())
     );
+
+    // Selección de jugadores
+    const handlePlayerSelect = (playerId: number) => {
+        setSelectedPlayers((prevSelected) =>
+            prevSelected.includes(playerId)
+                ? prevSelected.filter((id) => id !== playerId)
+                : [...prevSelected, playerId]
+        );
+        console.log();
+    };
 
     return (
         <>
-            {/* Input de búsqueda */}
-            <div className="max-w-md mb-4">
-                <div className="mb-2 block">
-                    <Label
-                        htmlFor="search"
-                        value="Buscar por:"
-                        className="font-bold text-white"
+            <div className="mb-5">
+                {/* Input de búsqueda */}
+                <div className="max-w-md mb-4">
+                    <div className="mb-2 block">
+                        <Label
+                            htmlFor="search"
+                            value="Buscar por:"
+                            className="font-bold text-white"
+                        />
+                    </div>
+                    <TextInput
+                        id="search"
+                        addon={<FaSearch />}
+                        type="text"
+                        placeholder="Nombre, liga, equipo, fecha registro"
+                        onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
-                <TextInput
-                    id="search"
-                    addon={<FaSearch />}
-                    type="text"
-                    placeholder="Nombre, liga, equipo"
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
+
+                <div className="text-white flex gap-4">
+                    <Button className="font-bold" color="failure">
+                        <FaFilePdf className="mr-3 self-center hidden md:block" />
+                        Descargar CURP
+                    </Button>
+                    <Button className="font-bold" color="success">
+                        <FaIdCard className="mr-3 self-center hidden md:block" />
+                        Descargar INE / Acta
+                    </Button>
+                    <Button className="font-bold" color="purple">
+                        <FaUserCircle className="mr-3 self-center hidden md:block" />
+                        Descargar Foto
+                    </Button>
+                </div>
             </div>
 
             {/* Tabla de jugadores */}
@@ -90,15 +84,32 @@ export default function PromotionTable() {
                         className="text-center text-white"
                         theme={{ cell: { base: "bg-[#1580AD] p-4" } }}
                     >
+                        <Table.HeadCell className="p-4"></Table.HeadCell>
                         <Table.HeadCell>Carnet</Table.HeadCell>
                         <Table.HeadCell>Nombre</Table.HeadCell>
                         <Table.HeadCell>CURP</Table.HeadCell>
                         <Table.HeadCell>Liga</Table.HeadCell>
                         <Table.HeadCell>Equipo</Table.HeadCell>
+                        <Table.HeadCell>Categoria</Table.HeadCell>
+                        <Table.HeadCell>Fecha De Registro</Table.HeadCell>
+                        <Table.HeadCell>Fecha De Nacimiento</Table.HeadCell>
                     </Table.Head>
                     <Table.Body className="divide-y text-center">
                         {filteredPlayers.map((player) => (
                             <Table.Row key={player.id_jugador}>
+                                <Table.Cell className="p-4">
+                                    <Checkbox
+                                        value={player.id_jugador}
+                                        checked={selectedPlayers.includes(
+                                            player.id_jugador
+                                        )}
+                                        onChange={() =>
+                                            handlePlayerSelect(
+                                                player.id_jugador
+                                            )
+                                        }
+                                    />
+                                </Table.Cell>
                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                     {player.carnet}
                                 </Table.Cell>
@@ -106,12 +117,17 @@ export default function PromotionTable() {
                                 <Table.Cell>{player.curp}</Table.Cell>
                                 <Table.Cell>{player.liga}</Table.Cell>
                                 <Table.Cell>{player.equipo}</Table.Cell>
+                                <Table.Cell>{player.categoria}</Table.Cell>
+                                <Table.Cell>{player.fecha_registro}</Table.Cell>
+                                <Table.Cell>
+                                    {player.fecha_nacimiento}
+                                </Table.Cell>
                             </Table.Row>
                         ))}
                         {filteredPlayers.length === 0 && (
                             <Table.Row>
                                 <Table.Cell
-                                    colSpan={5}
+                                    colSpan={9}
                                     className="text-center py-4"
                                 >
                                     No se encontraron resultados

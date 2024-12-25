@@ -31,7 +31,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
                 "/subir/firmas",
             ],
             liga: ["/liga"],
-            promo: ["/promotoria"],
+            promotoria: ["/promotoria"],
         };
 
         const userType = decodedToken?.user_type;

@@ -47,7 +47,7 @@ export default function LoginForm() {
                 navigate("/registrar/credencial");
             } else if (decodedToken?.user_type === "liga") {
                 navigate("/liga");
-            } else if (decodedToken?.user_type === "promo") {
+            } else if (decodedToken?.user_type === "promotoria") {
                 navigate("/promotoria");
             } else {
                 setModalOpt({
