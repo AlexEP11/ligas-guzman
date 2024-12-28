@@ -1,5 +1,5 @@
 import { Table, TextInput, Label, Checkbox, Button } from "flowbite-react";
-import { getAllPlayersPromo } from "@/api/promo/PromoTable";
+import { getAllPlayersPromo, getDocuments } from "@/api/promo/PromoTable";
 import { FaUserCircle } from "react-icons/fa";
 import { PlayerPromo } from "@/types/Player";
 import { FaFilePdf } from "react-icons/fa6";
@@ -7,9 +7,12 @@ import { FaIdCard } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { ModalToast } from "../common/ModalToast";
 
 export default function PromotionTable() {
     const [selectedPlayers, setSelectedPlayers] = useState<number[]>([]);
+    const [modalOpt, setModalOpt] = useState({ message: "", isError: false });
+    const [openModal, setOpenModal] = useState(false);
 
     // Estado para el término de búsqueda
     const [searchTerm, setSearchTerm] = useState("");
@@ -37,7 +40,36 @@ export default function PromotionTable() {
                 ? prevSelected.filter((id) => id !== playerId)
                 : [...prevSelected, playerId]
         );
-        console.log();
+    };
+
+    // Obtencion de documentos
+    const handleDownload = async (type: string) => {
+        for (const playerId of selectedPlayers) {
+            const player = data?.find((p) => p.id_jugador === playerId);
+            if (player) {
+                try {
+                    const fileData = await getDocuments(type, player.curp);
+                    const blob = new Blob([fileData]);
+
+                    let extension = "pdf"; // Predeterminado
+                    if (type === "foto") {
+                        extension = "jpg"; // Cambiar según el formato real de la foto
+                    }
+
+                    const link = document.createElement("a");
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = `${player.nombre}_${type}.${extension}`;
+                    link.click();
+                } catch (error) {
+                    setModalOpt({
+                        message: "Ocurrio un error al obtener el documento",
+                        isError: true,
+                    });
+                    setOpenModal(true);
+                    console.log(error);
+                }
+            }
+        }
     };
 
     return (
@@ -55,22 +87,37 @@ export default function PromotionTable() {
                     <TextInput
                         id="search"
                         addon={<FaSearch />}
-                        type="text"
+                        type="search"
                         placeholder="Nombre, liga, equipo, fecha registro"
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
 
                 <div className="text-white flex gap-4">
-                    <Button className="font-bold" color="failure">
+                    <Button
+                        className="font-bold"
+                        color="failure"
+                        onClick={() => handleDownload("curp")}
+                        disabled={selectedPlayers.length === 0}
+                    >
                         <FaFilePdf className="mr-3 self-center hidden md:block" />
                         Descargar CURP
                     </Button>
-                    <Button className="font-bold" color="success">
+                    <Button
+                        className="font-bold"
+                        color="success"
+                        onClick={() => handleDownload("ine")}
+                        disabled={selectedPlayers.length === 0}
+                    >
                         <FaIdCard className="mr-3 self-center hidden md:block" />
                         Descargar INE / Acta
                     </Button>
-                    <Button className="font-bold" color="purple">
+                    <Button
+                        className="font-bold"
+                        color="purple"
+                        onClick={() => handleDownload("foto")}
+                        disabled={selectedPlayers.length === 0}
+                    >
                         <FaUserCircle className="mr-3 self-center hidden md:block" />
                         Descargar Foto
                     </Button>
@@ -137,6 +184,11 @@ export default function PromotionTable() {
                     </Table.Body>
                 </Table>
             </div>
+            <ModalToast
+                modalOpt={modalOpt}
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+            />
         </>
     );
 }
