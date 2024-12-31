@@ -138,7 +138,7 @@ export default function FormPlayer() {
                 className="p-12 rounded-xl shadow-lg space-y-3 flex flex-col items-center max-w-lg bg-white"
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <h1 className="text-center mb-5 text-2xl font-extrabold uppercase">
+                <h1 className="text-center mb-5 text-2xl font-extrabold uppercase pointer-events-none">
                     Formulario de Registro
                 </h1>
                 <div className="w-full">
@@ -173,47 +173,62 @@ export default function FormPlayer() {
                     />
                 </div>
 
-                <div className="w-full">
+                <div
+                    contentEditable={false}
+                    className="w-full pointer-events-none cursor-not-allowed "
+                >
                     <Label htmlFor="curp" value="CURP" />
                     <TextInput
                         id="curp"
                         type="text"
                         {...register("curp")}
-                        disabled
+                        readOnly
                     />
                 </div>
 
-                <div className="w-full">
+                <div
+                    contentEditable={false}
+                    className="w-full pointer-events-none cursor-not-allowed"
+                >
                     <Label htmlFor="nombre" value="Nombre" />
                     <TextInput
                         id="nombre"
                         type="text"
                         {...register("nombre")}
-                        disabled
+                        readOnly
                     />
                 </div>
 
-                <div className="w-full">
+                <div
+                    contentEditable={false}
+                    className="w-full pointer-events-none cursor-not-allowed"
+                >
                     <Label htmlFor="apellido-p" value="Apellido Paterno" />
                     <TextInput
                         id="apellido-p"
                         type="text"
                         {...register("apellido_paterno")}
-                        disabled
+                        readOnly
                     />
                 </div>
 
-                <div className="w-full">
+                <div
+                    contentEditable={false}
+                    className="w-full pointer-events-none cursor-not-allowed  "
+                >
                     <Label htmlFor="apellido-m" value="Apellido Materno" />
                     <TextInput
                         id="apellido-m"
                         type="text"
                         {...register("apellido_materno")}
-                        disabled
+                        readOnly
                     />
                 </div>
 
-                <div className="w-full">
+                <div
+                    contentEditable={false}
+                    className="w-full pointer-events-none cursor-not-allowed  "
+                >
                     <Label
                         htmlFor="fecha-nacimiento"
                         value="Fecha de Nacimiento"
@@ -222,7 +237,7 @@ export default function FormPlayer() {
                         id="fecha-nacimiento"
                         type="text"
                         {...register("fecha_nacimiento")}
-                        disabled
+                        readOnly
                     />
                 </div>
 

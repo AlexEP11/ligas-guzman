@@ -8,7 +8,7 @@ export default function CardPlayer() {
     const { userData } = useUser();
 
     return (
-        <div className="flex-col items-center justify-center font-default">
+        <div className="flex-col items-center justify-center font-default pointer-events-none">
             <h2 className=" text-center mb-5 font-extrabold text-2xl uppercase text-white">
                 Previsualización de Credencial
             </h2>
