@@ -183,6 +183,7 @@ export default function FormPlayer() {
                         type="text"
                         {...register("curp")}
                         readOnly
+                        disabled
                     />
                 </div>
 
@@ -196,6 +197,7 @@ export default function FormPlayer() {
                         type="text"
                         {...register("nombre")}
                         readOnly
+                        disabled
                     />
                 </div>
 
@@ -209,6 +211,7 @@ export default function FormPlayer() {
                         type="text"
                         {...register("apellido_paterno")}
                         readOnly
+                        disabled
                     />
                 </div>
 
@@ -222,6 +225,7 @@ export default function FormPlayer() {
                         type="text"
                         {...register("apellido_materno")}
                         readOnly
+                        disabled
                     />
                 </div>
 
@@ -238,6 +242,7 @@ export default function FormPlayer() {
                         type="text"
                         {...register("fecha_nacimiento")}
                         readOnly
+                        disabled
                     />
                 </div>
 
