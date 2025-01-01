@@ -7,7 +7,7 @@ type HeaderProps = { navItems?: NavItems[]; name: string; linkIcon: string };
 export default function Header({ navItems, name, linkIcon }: HeaderProps) {
     const navigate = useNavigate();
 
-    const logout = () => {
+    function logout() {
         // Eliminar los datos del localStorage
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
@@ -15,16 +15,17 @@ export default function Header({ navItems, name, linkIcon }: HeaderProps) {
 
         // Redirigir al inicio de sesión
         navigate("/"); // Redirige a la página de login
-    };
+    }
 
     return (
-        <Navbar fluid rounded className="bg-[#0e080a] ">
+        <Navbar fluid rounded className="bg-[#0e080a]">
             <Navbar.Brand
                 href={linkIcon}
                 className="hover:scale-105 transition-transform duration-300"
             >
                 <img src="/logo.ico" className="mr-3 h-6 sm:h-9 " alt="Logo" />
-                <span className="self-center whitespace-nowrap text-lg font-bold text-white">
+                {/* Aplicamos restricciones de ancho y recorte solo en móviles */}
+                <span className="self-center text-lg font-bold text-white truncate max-w-[270px] sm:max-w-none">
                     {name}
                 </span>
             </Navbar.Brand>
@@ -37,8 +38,9 @@ export default function Header({ navItems, name, linkIcon }: HeaderProps) {
             <Navbar.Collapse
                 theme={{
                     base: "lg:block lg:w-auto w-full",
-                    list: "lg:flex-row  flex flex-col lg:space-x-8 lg:text-sm lg:font-medium",
+                    list: "lg:flex-row flex flex-col lg:space-x-8 lg:text-sm lg:font-medium",
                 }}
+                className="lg:items-center items-end"
             >
                 {navItems?.map((item, index) => (
                     <Navbar.Link
