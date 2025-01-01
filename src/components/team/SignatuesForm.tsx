@@ -62,7 +62,7 @@ export default function SignaturesForm() {
                     <div className="mb-2 block">
                         <Label
                             htmlFor="presidente"
-                            value="Frima Presidente"
+                            value="Firma Presidente"
                             className="font-bold"
                         />
                     </div>
@@ -76,7 +76,7 @@ export default function SignaturesForm() {
                     <div className="mb-2 block">
                         <Label
                             htmlFor="secretario"
-                            value="Frima Secretario"
+                            value="Firma Secretario"
                             className="font-bold"
                         />
                     </div>
