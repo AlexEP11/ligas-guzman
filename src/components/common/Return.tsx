@@ -11,11 +11,16 @@ export default function Return() {
         const sessionId = queryParams.get("session_id");
 
         if (sessionId) {
-            fetch(`/session-status?session_id=${sessionId}`)
+            fetch(
+                `http://137.184.134.164:8000/api/session-status?session_id=${sessionId}`
+            )
                 .then((res) => res.json())
                 .then((data) => {
                     setStatus(data.status);
                     setCustomerEmail(data.customer_email);
+                })
+                .catch((error) => {
+                    console.error("Error fetching session status:", error);
                 });
         }
     }, [location.search]);
