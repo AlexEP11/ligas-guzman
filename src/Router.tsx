@@ -10,7 +10,9 @@ import PromotionLayout from "./layout/PromotionLayout";
 import PromotionPage from "./pages/promotion/PromotionPage";
 import LeaguePage from "./pages/league/LeaguePage";
 import LeagueLayout from "./layout/LeagueLayout";
-import Return from "./components/common/Return";
+import Return from "./components/payment/Return";
+import SuccessPay from "./components/payment/SuccessPay";
+import PaymentLayout from "./layout/PaymentLayout";
 
 export default function Router() {
     const queryClient = new QueryClient();
@@ -70,7 +72,14 @@ export default function Router() {
                             path="/promotoria"
                         />
                     </Route>
-                    <Route element={<Return />} path="/return" />
+
+                    <Route element={<PaymentLayout />}>
+                        {/* Ruta de retorno */}
+                        <Route element={<Return />} path="/return" />
+
+                        {/* Ruta para mostrar el mensaje de pago completado */}
+                        <Route element={<SuccessPay />} path="/pago/exito" />
+                    </Route>
                 </Routes>
             </BrowserRouter>
         </QueryClientProvider>

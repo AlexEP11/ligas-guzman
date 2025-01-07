@@ -8,7 +8,7 @@ import { IoNewspaperOutline } from "react-icons/io5";
 import { ModalToast } from "../common/ModalToast";
 import { IoCubeOutline } from "react-icons/io5";
 import { FaSackDollar } from "react-icons/fa6";
-import CheckoutForm from "../common/CheckoutForm";
+import CheckoutForm from "../payment/CheckoutForm";
 import {
     getActualSpaces,
     getAlignmentPDF,

@@ -28,7 +28,7 @@ export default function Return() {
     }
 
     if (status === "complete") {
-        return <Navigate to="/historial/credenciales" />;
+        return <Navigate to="/pago/exito" />;
     }
 
     return null;
