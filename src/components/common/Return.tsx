@@ -11,7 +11,9 @@ export default function Return() {
         const sessionId = queryParams.get("session_id");
 
         if (sessionId) {
-            fetch(`http://137.184.134.164:8000/api/stripe/session/`)
+            fetch(
+                ` http://137.184.134.164:8000/api/session-status?session_id=${sessionId}`
+            )
                 .then((res) => res.json())
                 .then((data) => {
                     setStatus(data.status);
