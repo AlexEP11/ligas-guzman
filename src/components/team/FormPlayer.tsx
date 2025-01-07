@@ -154,7 +154,16 @@ export default function FormPlayer() {
 
                 <div className="w-full">
                     <div className="block">
-                        <Label htmlFor="ine-file" value="INE" />
+                        <Label
+                            htmlFor="ine-file"
+                            value={
+                                playerData?.años_registro >= 18
+                                    ? "INE"
+                                    : playerData.años_registro === 0
+                                    ? "INE"
+                                    : "ACTA DE NACIMIENTO"
+                            }
+                        />
                     </div>
                     <FileInput
                         id="ine-file"
