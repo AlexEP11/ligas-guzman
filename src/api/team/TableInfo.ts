@@ -124,3 +124,27 @@ export async function fetchClientSecret() {
         throw new Error(errorMessage); // Lanzamos el error con el mensaje adecuado
     }
 }
+
+export async function fetchSesionStatus(sessionId: string) {
+    try {
+        const { data } = await api.get(
+            `session-status?session_id=${sessionId}`
+        );
+        return data;
+    } catch (error) {
+        let errorMessage =
+            "Ocurrió un error inesperado. Por favor, inténtelo de nuevo.";
+
+        if (isAxiosError(error)) {
+            if (error.message.includes("ERR_CONNECTION_REFUSED")) {
+                errorMessage =
+                    "No se pudo establecer una conexión con el servidor. Por favor, inténtelo más tarde.";
+            } else if (error.response) {
+                // Extraer mensaje del backend
+                errorMessage = error.response.data.error || errorMessage;
+            }
+        }
+
+        throw new Error(errorMessage); // Lanzamos el error con el mensaje adecuado
+    }
+}
