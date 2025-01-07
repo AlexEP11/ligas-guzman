@@ -10,6 +10,7 @@ import PromotionLayout from "./layout/PromotionLayout";
 import PromotionPage from "./pages/promotion/PromotionPage";
 import LeaguePage from "./pages/league/LeaguePage";
 import LeagueLayout from "./layout/LeagueLayout";
+import Return from "./components/common/Return";
 
 export default function Router() {
     const queryClient = new QueryClient();
@@ -69,6 +70,7 @@ export default function Router() {
                             path="/promotoria"
                         />
                     </Route>
+                    <Route element={<Return />} path="/return" />
                 </Routes>
             </BrowserRouter>
         </QueryClientProvider>

@@ -56,13 +56,24 @@ export default function CheckoutForm({
                             </div>
 
                             {/* Formulario incrustado */}
-                            <div id="checkout" className="mt-4">
-                                <EmbeddedCheckoutProvider
-                                    stripe={stripePromise}
-                                    options={options}
+                            <div
+                                id="checkout"
+                                className="flex justify-center"
+                                style={{ maxHeight: "500px", overflow: "auto" }} // Limita el alto y agrega scroll si es necesario
+                            >
+                                <div
+                                    style={{
+                                        width: "100%",
+                                        maxWidth: "600px", // Restringe el ancho máximo
+                                    }}
                                 >
-                                    <EmbeddedCheckout />
-                                </EmbeddedCheckoutProvider>
+                                    <EmbeddedCheckoutProvider
+                                        stripe={stripePromise}
+                                        options={options}
+                                    >
+                                        <EmbeddedCheckout />
+                                    </EmbeddedCheckoutProvider>
+                                </div>
                             </div>
 
                             {/* Botón para cerrar */}
