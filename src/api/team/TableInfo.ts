@@ -101,10 +101,10 @@ export async function getActualSpaces() {
     }
 }
 
-export async function fetchClientSecret() {
+export async function fetchClientSecret(amount: number) {
     try {
         const { data } = await api.post("/stripe/checkout-session/", {
-            credits: 10, // Datos que envías al backend
+            credits: amount,
         });
         return data.clientSecret;
     } catch (error) {
