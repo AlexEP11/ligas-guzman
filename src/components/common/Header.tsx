@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { useUser } from "@/context/hooks/useUser";
 import { Navbar } from "flowbite-react";
 
-export default function Header() {
-    const { userData } = useUser();
+type NavItems = { label: string; href?: string };
+type HeaderProps = { navItems?: NavItems[]; name: string; linkIcon: string };
+
+export default function Header({ navItems, name, linkIcon }: HeaderProps) {
     const navigate = useNavigate();
 
-    const logout = () => {
+    function logout() {
         // Eliminar los datos del localStorage
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
@@ -14,34 +15,53 @@ export default function Header() {
 
         // Redirigir al inicio de sesión
         navigate("/"); // Redirige a la página de login
-    };
+    }
 
     return (
-        <Navbar fluid rounded>
-            <Navbar.Brand href="/registrar/credencial">
-                <img src="/logo.ico" className="mr-3 h-6 sm:h-9" alt="Logo" />
-                <span className="self-center whitespace-nowrap text-lg font-semibold dark:text-white">
-                    {userData.nombre_equipo}
+        <Navbar fluid rounded className="bg-[#0e080a]">
+            <Navbar.Brand
+                href={linkIcon}
+                className="hover:scale-105 transition-transform duration-300"
+            >
+                <img src="/logo.ico" className="mr-3 h-6 sm:h-9 " alt="Logo" />
+                {/* Aplicamos restricciones de ancho y recorte solo en móviles */}
+                <span className="self-center text-lg font-bold text-white truncate max-w-[270px] sm:max-w-none">
+                    {name}
                 </span>
             </Navbar.Brand>
             <Navbar.Toggle
                 theme={{
                     base: "lg:hidden ",
                 }}
+                className="bg-white p-2 rounded-md "
             />
             <Navbar.Collapse
                 theme={{
                     base: "lg:block lg:w-auto w-full",
-                    list: "lg:flex-row  flex flex-col lg:space-x-8 lg:text-sm lg:font-medium",
+                    list: "lg:flex-row flex flex-col lg:space-x-8 lg:text-sm lg:font-medium",
                 }}
+                className="lg:items-center items-end"
             >
-                <Navbar.Link href="/registrar/credencial">Registrar Credencial</Navbar.Link>
-                <Navbar.Link href="/historial/credenciales">Historial de Credenciales</Navbar.Link>
-                <Navbar.Link href="/subir/firmas">Subir Firmas</Navbar.Link>
+                {navItems?.map((item, index) => (
+                    <Navbar.Link
+                        key={index}
+                        href={item.href}
+                        className="text-white font-bold text-lg transition-colors duration-300 ease-linear"
+                        theme={{
+                            active: { off: "md:hover:text-[#1580AD]" },
+                        }}
+                    >
+                        {item.label}
+                    </Navbar.Link>
+                ))}
                 <Navbar.Link
                     onClick={logout}
-                    className="cursor-pointer transition-colors duration-300"
-                    theme={{ active: { off: "text-red-500 font-bold hover:text-red-600 " } }}
+                    className="cursor-pointer transition-colors duration-300 text-lg"
+                    theme={{
+                        active: {
+                            off: "text-red-500 font-bold hover:text-red-700 ",
+                        },
+                    }}
                 >
                     Cerrar Sesión
                 </Navbar.Link>

@@ -1,15 +1,15 @@
-import SiganturesForm from "@/components/team/SignatuesForm";
+import LeagueForm from "@/components/league/LeagueForm";
 import { Alert } from "flowbite-react";
 import { HiInformationCircle } from "react-icons/hi";
 
-export default function UploadSignatures() {
+export default function LeaguePage() {
     return (
         <section className="max-w-screen-sm mx-auto p-3">
             <article className="p-5 bg-white rounded-lg shadow-lg border-black">
                 <h1 className="text-2xl text-center uppercase font-bold mb-5">
-                    Subir Firmas
+                    Subir Firmas y Logo
                 </h1>
-                <SiganturesForm />
+                <LeagueForm />
             </article>
             <Alert
                 icon={HiInformationCircle}

@@ -12,7 +12,10 @@ export type Player = {
     curpFile: File | null;
 };
 
-export type PlayerInputForm = Omit<Player, "carnet" | "años_registro" | "categoria">;
+export type PlayerInputForm = Omit<
+    Player,
+    "carnet" | "años_registro" | "categoria"
+>;
 
 export type PlayerResponse = {
     abreviatura: string;
@@ -34,4 +37,16 @@ export type TableInfoPlayer = {
     edad: number;
     foto: string;
     nombre: string;
+};
+
+export type PlayerPromo = {
+    id_jugador: number;
+    curp: string;
+    nombre: string;
+    carnet: string;
+    fecha_registro: string;
+    equipo: string;
+    liga: string;
+    categoria: string;
+    fecha_nacimiento: string;
 };

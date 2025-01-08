@@ -29,12 +29,15 @@ export default function FormPlayer() {
         curpFile: null,
     };
 
-    const { register, handleSubmit, reset, setValue, watch } = useForm<PlayerInputForm>({
-        defaultValues: initialValues,
-    });
+    const { register, handleSubmit, reset, setValue, watch } =
+        useForm<PlayerInputForm>({
+            defaultValues: initialValues,
+        });
 
     const formValues = watch();
-    const isFormValid = Object.values(formValues).every((value) => value !== "" && value !== null);
+    const isFormValid = Object.values(formValues).every(
+        (value) => value !== "" && value !== null
+    );
 
     const {
         mutate: sendPDF,
@@ -90,7 +93,9 @@ export default function FormPlayer() {
             ...playerData,
             ...formValues,
             carnet: curpData
-                ? curpData.abreviatura + userData.n_categoria + String(curpData?.numero_jugadores).padStart(3, "0")
+                ? curpData.abreviatura +
+                  userData.n_categoria +
+                  String(curpData?.numero_jugadores).padStart(3, "0")
                 : "???",
             foto: formValues.foto || null,
         };
@@ -102,25 +107,26 @@ export default function FormPlayer() {
     }, [formValues, curpData, playerData, setPlayerData, userData.n_categoria]);
 
     // Función genérica para manejar cambios de archivos
-    const handleFileChange = (field: keyof PlayerInputForm) => (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            setValue(field, file);
-            if (field === "foto") {
-                setPlayerData({
-                    ...playerData,
-                    foto: file,
-                });
-            }
+    const handleFileChange =
+        (field: keyof PlayerInputForm) =>
+        (event: ChangeEvent<HTMLInputElement>) => {
+            const file = event.target.files?.[0];
+            if (file) {
+                setValue(field, file);
+                if (field === "foto") {
+                    setPlayerData({
+                        ...playerData,
+                        foto: file,
+                    });
+                }
 
-            if (field === "curpFile") {
-                sendPDF(file);
+                if (field === "curpFile") {
+                    sendPDF(file);
+                }
             }
-        }
-    };
+        };
 
     const onSubmit = (data: PlayerInputForm) => {
-        console.log("Formulario enviado:", data);
         createPlayer(data);
         resetPDF();
         reset();
@@ -132,59 +138,141 @@ export default function FormPlayer() {
                 className="p-12 rounded-xl shadow-lg space-y-3 flex flex-col items-center max-w-lg bg-white"
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <h1 className="font-roboto text-center mb-5 text-2xl font-extrabold">Formulario de Registro</h1>
+                <h1 className="text-center mb-5 text-2xl font-extrabold uppercase pointer-events-none">
+                    Formulario de Registro
+                </h1>
                 <div className="w-full">
                     <div className="block">
                         <Label htmlFor="curp-file" value="CURP" />
                     </div>
-                    <FileInput id="curp-file" accept="application/pdf" onChange={handleFileChange("curpFile")} />
+                    <FileInput
+                        id="curp-file"
+                        accept="application/pdf"
+                        onChange={handleFileChange("curpFile")}
+                    />
                 </div>
 
                 <div className="w-full">
                     <div className="block">
-                        <Label htmlFor="ine-file" value="INE" />
+                        <Label
+                            htmlFor="ine-file"
+                            value={
+                                playerData?.años_registro >= 18
+                                    ? "INE"
+                                    : playerData.años_registro === 0
+                                    ? "INE"
+                                    : "ACTA DE NACIMIENTO"
+                            }
+                        />
                     </div>
-                    <FileInput id="ine-file" accept="application/pdf" onChange={handleFileChange("ine")} />
+                    <FileInput
+                        id="ine-file"
+                        accept="application/pdf"
+                        onChange={handleFileChange("ine")}
+                    />
                 </div>
                 <div className="w-full">
                     <div className="block">
                         <Label htmlFor="foto-file" value="FOTO" />
                     </div>
-                    <FileInput id="foto-file" accept="image/png" onChange={handleFileChange("foto")} />
+                    <FileInput
+                        id="foto-file"
+                        accept="image/jpeg, image/png, image/jpg"
+                        onChange={handleFileChange("foto")}
+                    />
                 </div>
 
-                <div className="w-full">
+                <div
+                    contentEditable={false}
+                    className="w-full pointer-events-none cursor-not-allowed "
+                >
                     <Label htmlFor="curp" value="CURP" />
-                    <TextInput id="curp" type="text" {...register("curp")} disabled />
+                    <TextInput
+                        id="curp"
+                        type="text"
+                        {...register("curp")}
+                        readOnly
+                        disabled
+                    />
                 </div>
 
-                <div className="w-full">
+                <div
+                    contentEditable={false}
+                    className="w-full pointer-events-none cursor-not-allowed"
+                >
                     <Label htmlFor="nombre" value="Nombre" />
-                    <TextInput id="nombre" type="text" {...register("nombre")} disabled />
+                    <TextInput
+                        id="nombre"
+                        type="text"
+                        {...register("nombre")}
+                        readOnly
+                        disabled
+                    />
                 </div>
 
-                <div className="w-full">
+                <div
+                    contentEditable={false}
+                    className="w-full pointer-events-none cursor-not-allowed"
+                >
                     <Label htmlFor="apellido-p" value="Apellido Paterno" />
-                    <TextInput id="apellido-p" type="text" {...register("apellido_paterno")} disabled />
+                    <TextInput
+                        id="apellido-p"
+                        type="text"
+                        {...register("apellido_paterno")}
+                        readOnly
+                        disabled
+                    />
                 </div>
 
-                <div className="w-full">
+                <div
+                    contentEditable={false}
+                    className="w-full pointer-events-none cursor-not-allowed  "
+                >
                     <Label htmlFor="apellido-m" value="Apellido Materno" />
-                    <TextInput id="apellido-m" type="text" {...register("apellido_materno")} disabled />
+                    <TextInput
+                        id="apellido-m"
+                        type="text"
+                        {...register("apellido_materno")}
+                        readOnly
+                        disabled
+                    />
                 </div>
 
-                <div className="w-full">
-                    <Label htmlFor="fecha-nacimiento" value="Fecha de Nacimiento" />
-                    <TextInput id="fecha-nacimiento" type="text" {...register("fecha_nacimiento")} disabled />
+                <div
+                    contentEditable={false}
+                    className="w-full pointer-events-none cursor-not-allowed  "
+                >
+                    <Label
+                        htmlFor="fecha-nacimiento"
+                        value="Fecha de Nacimiento"
+                    />
+                    <TextInput
+                        id="fecha-nacimiento"
+                        type="text"
+                        {...register("fecha_nacimiento")}
+                        readOnly
+                        disabled
+                    />
                 </div>
 
-                <Button type="submit" className="w-full" disabled={!isFormValid}>
-                    <HiMiniUserPlus className="mr-3  self-center h-5 w-5" />
+                <Button
+                    type="submit"
+                    className="w-full font-bold text-white"
+                    disabled={!isFormValid}
+                    theme={{
+                        color: { info: "bg-[#1580AD] hover:bg-[#126385]" },
+                    }}
+                >
+                    <HiMiniUserPlus className="mr-3 text-white self-center h-5 w-5" />
                     Registrar
                 </Button>
             </form>
 
-            <ModalToast openModal={openModal} setOpenModal={setOpenModal} modalOpt={modalOpt} />
+            <ModalToast
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+                modalOpt={modalOpt}
+            />
         </>
     );
 }

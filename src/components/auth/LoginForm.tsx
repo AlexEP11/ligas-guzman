@@ -33,9 +33,11 @@ export default function LoginForm() {
         mutationFn: authLogin,
         onSuccess: (decodedToken) => {
             setUserData({
-                nombre_equipo: decodedToken.nombre_equipo ?? "Equipo Desconocido",
-                user_type: decodedToken.user_type ?? "Usuario desconocido",
-                categoria: decodedToken.categoria ?? "Categoría desconocida",
+                nombre_equipo:
+                    decodedToken.nombre_equipo ?? "Equipo Desconocido",
+                user_type: decodedToken.user_type ?? "Usuario Desconocido",
+                liga: decodedToken.liga ?? "Liga Desconocida",
+                categoria: decodedToken.categoria ?? "Categoría Desconocida",
                 equipo_id: decodedToken.equipo_id ?? -1,
                 n_categoria: decodedToken.n_categoria ?? -1,
             });
@@ -44,10 +46,13 @@ export default function LoginForm() {
             if (decodedToken?.user_type === "equipo") {
                 navigate("/registrar/credencial");
             } else if (decodedToken?.user_type === "liga") {
-                navigate("/liga-dashboard");
+                navigate("/liga");
+            } else if (decodedToken?.user_type === "promotoria") {
+                navigate("/promotoria");
             } else {
                 setModalOpt({
-                    message: "Tipo de usuario no reconocido. Contacta al administrador.",
+                    message:
+                        "Tipo de usuario no reconocido. Contacta al administrador.",
                     isError: true,
                 });
                 setOpenModal(true);
@@ -72,17 +77,35 @@ export default function LoginForm() {
     return (
         <>
             <div className="flex-col items-center justify-center lg:w-1/2 p-4">
-                <h1 className="text-4xl font-bold mb-5">Iniciar Sesión</h1>
-                <form className="flex max-w-md flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+                <h1 className="text-5xl font-bold  text-center text-white mb-10">
+                    Iniciar Sesión
+                </h1>
+                <form
+                    className="flex max-w-md flex-col gap-4"
+                    onSubmit={handleSubmit(onSubmit)}
+                >
                     <div>
                         <div className="mb-2 block">
-                            <Label htmlFor="usuario" value="Usuario" />
+                            <Label
+                                htmlFor="usuario"
+                                value="Usuario"
+                                className="text-white font-bold"
+                            />
                         </div>
-                        <TextInput id="usuario" type="text" placeholder="Ej: Leonidas" {...register("username")} />
+                        <TextInput
+                            id="usuario"
+                            type="text"
+                            placeholder="Ej: Leonidas"
+                            {...register("username")}
+                        />
                     </div>
                     <div>
                         <div className="mb-2 block">
-                            <Label htmlFor="contraseña" value="Contraseña" />
+                            <Label
+                                htmlFor="contraseña"
+                                value="Contraseña"
+                                className="text-white font-bold"
+                            />
                         </div>
                         <TextInput
                             id="contraseña"
@@ -91,13 +114,23 @@ export default function LoginForm() {
                             {...register("password")}
                         />
                     </div>
-                    <Button type="submit" color="info" className="mt-3 font-bold">
+                    <Button
+                        type="submit"
+                        theme={{
+                            color: { info: "bg-[#1580AD] hover:bg-[#126385]" },
+                        }}
+                        className="mt-3 font-bold text-white"
+                    >
                         <MdOutlineSportsSoccer className="self-center mr-2" />
                         Ingresar
                     </Button>
                 </form>
             </div>
-            <ModalToast setOpenModal={setOpenModal} openModal={openModal} modalOpt={modalOpt} />
+            <ModalToast
+                setOpenModal={setOpenModal}
+                openModal={openModal}
+                modalOpt={modalOpt}
+            />
         </>
     );
 }
