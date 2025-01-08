@@ -77,6 +77,9 @@ export default function TableInfoPlayer() {
             document.body.removeChild(a); // Eliminar el enlace
             window.URL.revokeObjectURL(url); // Limpiar la URL
         },
+        onError: (error) => {
+            console.log(error);
+        },
     });
 
     const { data: { credenciales = 0 } = {} } = useQuery({
@@ -106,6 +109,14 @@ export default function TableInfoPlayer() {
     };
 
     const handleCredentials = () => {
+        if (credenciales < selectedPlayers.length) {
+            setModalOpt({
+                message: `No cuentas con los espacios suficientes para generar ${selectedPlayers.length} credenciales`,
+                isError: true,
+            });
+            setOpenModal(true);
+            return;
+        }
         credentials(selectedPlayers);
     };
 
