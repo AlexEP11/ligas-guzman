@@ -17,6 +17,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     const [userData, setUserData] = useState<User>({
         user_type: "Usuario Desconocido",
         nombre_equipo: "Equipo Desconocido",
+        nombre_liga: "Liga Desconocida",
         categoria: "Categoría Desconocida",
         liga: "Liga Desconocida",
         equipo_id: -1,
@@ -37,6 +38,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
                         user_type: decoded.user_type || "Usuario Desconocido",
                         nombre_equipo:
                             decoded.nombre_equipo || "Equipo Desconocido",
+                        nombre_liga: decoded.nombre_liga || "Liga Desconocida",
                         liga: decoded.liga || "Liga Desconocida",
                         categoria: decoded.categoria || "Categoría Desconocida",
                         equipo_id: decoded.equipo_id || -1,
@@ -54,6 +56,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         return {
             user_type: "Usuario Desconocido",
             nombre_equipo: "Equipo Desconocido",
+            nombre_liga: "Liga Desconocida",
             liga: "Liga Desconocida",
             categoria: "Categoría Desconocida",
             n_categoria: 0,
