@@ -14,7 +14,7 @@ export default function CardPlayer() {
             </h2>
             <aside className="p-5 rounded-2xl shadow-md shadow-black/50 border-4 border-black w-[550px] h-[360px] bg-nv bg-cover bg-center relative overflow-hidden flex flex-col">
                 <h3 className="uppercase text-xs text-center font-bold mb-1">
-                    Liga de Veteranos Independientes de Ciudad Guzman
+                    {userData.nombre_liga}
                 </h3>
                 <p className="uppercase text-xs text-center font-bold">
                     Certifica el equipo:{" "}

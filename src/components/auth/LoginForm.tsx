@@ -37,6 +37,7 @@ export default function LoginForm() {
                     decodedToken.nombre_equipo ?? "Equipo Desconocido",
                 user_type: decodedToken.user_type ?? "Usuario Desconocido",
                 liga: decodedToken.liga ?? "Liga Desconocida",
+                nombre_liga: decodedToken.nombre_liga ?? "Liga Desconocida",
                 categoria: decodedToken.categoria ?? "Categoría Desconocida",
                 equipo_id: decodedToken.equipo_id ?? -1,
                 n_categoria: decodedToken.n_categoria ?? -1,
