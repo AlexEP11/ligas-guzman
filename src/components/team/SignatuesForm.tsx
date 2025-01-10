@@ -39,9 +39,10 @@ export default function SignaturesForm() {
             setOpenModal(true);
             reset();
         },
-        onError: () => {
+        onError: (error) => {
+            console.log(error);
             setModalOpt({
-                message: "Error al guardar la imagen",
+                message: error.message || "Error al guardar la imagen",
                 isError: true,
             });
             setOpenModal(true);
