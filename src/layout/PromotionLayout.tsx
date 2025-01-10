@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "@/components/common/Header";
 import BackGround from "./styles/Background";
+import Footer from "@/components/common/Footer";
 
 export default function PromotionLayout() {
     return (
@@ -15,6 +16,7 @@ export default function PromotionLayout() {
                     </section>
                 </main>
             </div>
+            <Footer />
         </>
     );
 }

@@ -2,6 +2,7 @@ import { useUser } from "@/context/hooks/useUser";
 import { Outlet } from "react-router-dom";
 import Header from "@/components/common/Header";
 import BackGround from "./styles/Background";
+import Footer from "@/components/common/Footer";
 
 export default function TeamLayout() {
     const { userData } = useUser();
@@ -26,6 +27,7 @@ export default function TeamLayout() {
                     </section>
                 </main>
             </div>
+            <Footer />
         </>
     );
 }

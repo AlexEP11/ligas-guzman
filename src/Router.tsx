@@ -13,6 +13,7 @@ import LeagueLayout from "./layout/LeagueLayout";
 import Return from "./components/payment/Return";
 import SuccessPay from "./components/payment/SuccessPay";
 import PaymentLayout from "./layout/PaymentLayout";
+import TermsAndConditions from "./pages/auth/TermsAndConditions";
 
 export default function Router() {
     const queryClient = new QueryClient();
@@ -74,6 +75,12 @@ export default function Router() {
                     </Route>
 
                     <Route element={<PaymentLayout />}>
+                        {/* Ruta de terminos y condiciones */}
+                        <Route
+                            element={<TermsAndConditions />}
+                            path="/terminos-condiciones"
+                        />
+
                         {/* Ruta de retorno */}
                         <Route element={<Return />} path="/return" />
 

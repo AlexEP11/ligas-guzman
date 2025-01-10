@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import Header from "@/components/common/Header";
 import BackGround from "./styles/Background";
 import { useUser } from "@/context/hooks/useUser";
+import Footer from "@/components/common/Footer";
 
 export default function LeagueLayout() {
     const { userData } = useUser();
@@ -17,6 +18,7 @@ export default function LeagueLayout() {
                     </section>
                 </main>
             </div>
+            <Footer />
         </>
     );
 }
