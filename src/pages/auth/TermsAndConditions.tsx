@@ -40,7 +40,13 @@ export default function TerminosYCondiciones() {
                             La información proporcionada será utilizada
                             exclusivamente para la generación de credenciales y
                             no será compartida con terceros, excepto cuando sea
-                            estrictamente necesario para cumplir con la ley.
+                            estrictamente necesario para cumplir con la ley. Sin
+                            embargo, el acceso a esta información estará
+                            disponible para los promotores y los presidentes de
+                            cada liga, quienes son responsables de su manejo
+                            adecuado. Los desarrolladores de esta plataforma no
+                            se hacen responsables por el uso indebido que dichas
+                            personas puedan darle a la información.
                         </p>
                     </section>
                     <section>
@@ -108,10 +114,6 @@ export default function TerminosYCondiciones() {
                             </a>
                         </p>
                     </section>
-
-                    <nav className="bg-[#04628b] text-white font-bold py-2 px-4 hover:cursor-pointer rounded hover:bg-[#074966] transition duration-300">
-                        <a href="/">Aceptar Terminos y Condiciones</a>
-                    </nav>
                 </div>
             </div>
         </div>
