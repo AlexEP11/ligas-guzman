@@ -67,6 +67,8 @@ export default function FormPlayer() {
                 isError: true,
             });
             setOpenModal(true);
+            resetPDF();
+            reset();
         },
     });
 
@@ -85,6 +87,7 @@ export default function FormPlayer() {
                 isError: true,
             });
             setOpenModal(true);
+            reset();
         },
     });
 
