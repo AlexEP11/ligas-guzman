@@ -37,9 +37,9 @@ export default function LeagueForm() {
         onSuccess: () => {
             uploadLogo(formValues.logo!);
         },
-        onError: () => {
+        onError: (error) => {
             setModalOpt({
-                message: "Error al guardar las firmas",
+                message: error.message || "Error al guardar las firmas",
                 isError: true,
             });
             setOpenModal(true);

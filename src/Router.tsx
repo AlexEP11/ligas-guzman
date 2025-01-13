@@ -8,11 +8,13 @@ import ProtectedRoute from "@/pages/auth/ProtectedRoute";
 import UploadSignatures from "./pages/team/UploadSignatures";
 import PromotionLayout from "./layout/PromotionLayout";
 import PromotionPage from "./pages/promotion/PromotionPage";
-import LeaguePage from "./pages/league/LeaguePage";
+import UploadSignaturesLeague from "./pages/league/UploadSignaturesLeague";
 import LeagueLayout from "./layout/LeagueLayout";
 import Return from "./components/payment/Return";
 import SuccessPay from "./components/payment/SuccessPay";
 import PaymentLayout from "./layout/PaymentLayout";
+import TermsAndConditions from "./pages/auth/TermsAndConditions";
+import TableTeams from "./pages/league/TableTeams";
 
 export default function Router() {
     const queryClient = new QueryClient();
@@ -55,7 +57,12 @@ export default function Router() {
                             </ProtectedRoute>
                         }
                     >
-                        <Route element={<LeaguePage />} index path="/liga" />
+                        <Route element={<TableTeams />} index path="/liga" />
+                        <Route
+                            element={<UploadSignaturesLeague />}
+                            index
+                            path="/liga/subir/firmas"
+                        />
                     </Route>
 
                     {/* Ruta de promotoria */}
@@ -74,6 +81,12 @@ export default function Router() {
                     </Route>
 
                     <Route element={<PaymentLayout />}>
+                        {/* Ruta de terminos y condiciones */}
+                        <Route
+                            element={<TermsAndConditions />}
+                            path="/terminos-condiciones"
+                        />
+
                         {/* Ruta de retorno */}
                         <Route element={<Return />} path="/return" />
 

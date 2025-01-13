@@ -9,6 +9,7 @@ import { authLogin } from "@/api/auth/Login";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useUser } from "@/context/hooks/useUser";
+import BannerTerms from "../common/BannerTerms";
 
 export default function LoginForm() {
     const { setUserData } = useUser();
@@ -118,13 +119,16 @@ export default function LoginForm() {
                     <Button
                         type="submit"
                         theme={{
-                            color: { info: "bg-[#1580AD] hover:bg-[#126385]" },
+                            color: {
+                                info: "bg-black hover:bg-[#17242f]",
+                            },
                         }}
                         className="mt-3 font-bold text-white"
                     >
                         <MdOutlineSportsSoccer className="self-center mr-2" />
                         Ingresar
                     </Button>
+                    <BannerTerms />
                 </form>
             </div>
             <ModalToast
