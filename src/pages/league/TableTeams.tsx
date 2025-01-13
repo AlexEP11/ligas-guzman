@@ -72,7 +72,10 @@ export default function TableTeams() {
     };
 
     return (
-        <>
+        <div
+            className="p-4
+        "
+        >
             <div className="mb-5">
                 {/* Input de búsqueda */}
                 <div className="max-w-md mb-4">
@@ -186,6 +189,6 @@ export default function TableTeams() {
                 openModal={openModal}
                 setOpenModal={setOpenModal}
             />
-        </>
+        </div>
     );
 }
