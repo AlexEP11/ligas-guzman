@@ -2,7 +2,7 @@ import LeagueForm from "@/components/league/LeagueForm";
 import { Alert } from "flowbite-react";
 import { HiInformationCircle } from "react-icons/hi";
 
-export default function LeaguePage() {
+export default function UploadSignaturesLeague() {
     return (
         <section className="max-w-screen-sm mx-auto p-3">
             <article className="p-5 bg-white rounded-lg shadow-lg border-black">

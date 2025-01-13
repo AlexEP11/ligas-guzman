@@ -30,7 +30,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
                 "/historial/credenciales",
                 "/subir/firmas",
             ],
-            liga: ["/liga"],
+            liga: ["/liga", "/liga/subir/firmas"],
             promotoria: ["/promotoria"],
         };
 
