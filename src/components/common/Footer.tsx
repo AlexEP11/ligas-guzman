@@ -5,7 +5,9 @@ export default function Footer() {
                 <nav className="space-y-3 sm:space-y-0">
                     <a
                         href="/terminos-condiciones"
-                        className="transition-colors text-cyan-600 hover:text-white  duration-300 font-bold mx-4 block sm:inline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="transition-colors text-cyan-600 hover:text-white duration-300 font-bold mx-4 block sm:inline"
                     >
                         Términos y Condiciones
                     </a>
