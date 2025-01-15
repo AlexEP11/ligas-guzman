@@ -13,6 +13,8 @@ export default function BannerTerms() {
                             Al iniciar sesión aceptas los&nbsp;
                             <a
                                 href="/terminos-condiciones"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="inline font-medium text-cyan-600 underline decoration-solid underline-offset-2 hover:no-underline "
                             >
                                 Terminos y Condiciones
