@@ -15,6 +15,11 @@ import {
     getAllPlayers,
     sendCard,
 } from "@/api/team/TableInfo";
+import { jwtDecode } from "jwt-decode";
+
+type DecodedToken = {
+    id_liga: number;
+};
 
 export default function TableInfoPlayer() {
     const { userData } = useUser();
@@ -31,6 +36,9 @@ export default function TableInfoPlayer() {
         queryFn: getAllPlayers,
         queryKey: ["players"],
     });
+
+    const token = localStorage.getItem("accessToken");
+    const decodedToken: DecodedToken = jwtDecode(token!);
 
     const { mutate: aligmentPDF } = useMutation({
         mutationFn: getAlignmentPDF,
@@ -130,14 +138,16 @@ export default function TableInfoPlayer() {
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-3 lg:space-y-0 lg:space-x-3 text-white">
                     <div className="flex flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-3">
                         {/* Botón para abrir el modal */}
-                        <Button
-                            onClick={() => setOpenCheckOut(true)}
-                            color="success"
-                            className="font-bold w-full lg:w-auto"
-                        >
-                            <FaSackDollar className="self-center mr-3" />
-                            Comprar espacios de credenciales
-                        </Button>
+                        {decodedToken.id_liga !== 3 && (
+                            <Button
+                                onClick={() => setOpenCheckOut(true)}
+                                color="success"
+                                className="font-bold w-full lg:w-auto"
+                            >
+                                <FaSackDollar className="self-center mr-3" />
+                                Comprar espacios de credenciales
+                            </Button>
+                        )}
                         <Button
                             className="font-bold w-full lg:w-auto"
                             color="purple"
