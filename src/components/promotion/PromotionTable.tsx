@@ -183,6 +183,13 @@ export default function PromotionTable() {
                         )}
                     </Table.Body>
                 </Table>
+                <p className="text-sm p-5">
+                    Mostrando{" "}
+                    <span className="font-bold">
+                        {filteredPlayers?.length || 0}
+                    </span>{" "}
+                    jugadores
+                </p>
             </div>
             <ModalToast
                 modalOpt={modalOpt}
