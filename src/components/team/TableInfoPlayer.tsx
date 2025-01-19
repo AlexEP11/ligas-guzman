@@ -138,7 +138,8 @@ export default function TableInfoPlayer() {
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-3 lg:space-y-0 lg:space-x-3 text-white">
                     <div className="flex flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-3">
                         {/* Botón para abrir el modal */}
-                        {decodedToken.id_liga !== 3 && (
+                        {decodedToken.id_liga !== 3 &&
+                        decodedToken.id_liga !== 4 ? (
                             <Button
                                 onClick={() => setOpenCheckOut(true)}
                                 color="success"
@@ -147,7 +148,7 @@ export default function TableInfoPlayer() {
                                 <FaSackDollar className="self-center mr-3" />
                                 Comprar espacios de credenciales
                             </Button>
-                        )}
+                        ) : null}
                         <Button
                             className="font-bold w-full lg:w-auto"
                             color="purple"
