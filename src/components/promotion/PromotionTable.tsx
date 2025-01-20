@@ -10,84 +10,81 @@ import { ModalToast } from "../common/ModalToast";
 import { Table, TextInput, Label, Checkbox, Button } from "flowbite-react";
 
 export default function PromotionTable() {
-    const [selectedPlayers, setSelectedPlayers] = useState<number[]>([]);
+    const [selectedPlayer, setSelectedPlayer] = useState<number | null>(null);
     const [modalOpt, setModalOpt] = useState({ message: "", isError: false });
     const [openModal, setOpenModal] = useState(false);
 
     // Estado para el término de búsqueda
     const [searchTerm, setSearchTerm] = useState("");
 
-    // Estado para la paginación
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 100;
+    // Estado para manejar las URL de paginación
+    const [currentPageUrl, setCurrentPageUrl] = useState<string | null>(null);
 
-    const { data } = useQuery<PlayersResponseTable>({
-        queryFn: getPlayersTables,
-        queryKey: ["promotoriaAll"],
+    const { data, isFetching } = useQuery<PlayersResponseTable>({
+        queryFn: () => getPlayersTables(currentPageUrl, searchTerm),
+        queryKey: ["promotoriaAll", currentPageUrl, searchTerm],
+        refetchOnWindowFocus: false,
     });
 
     const players = data?.results ?? [];
-
-    // Filtrar jugadores
-    const filteredPlayers = players.filter(
-        (player) =>
-            player.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            player.liga?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            player.equipo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            player.fecha_registro
-                ?.toLowerCase()
-                .includes(searchTerm.toLowerCase())
-    );
-
-    // Calcular los datos paginados
-    const totalPlayers = filteredPlayers.length;
-    const paginatedPlayers =
-        totalPlayers > 0
-            ? filteredPlayers.slice(
-                  (currentPage - 1) * pageSize,
-                  currentPage * pageSize
-              )
-            : [];
 
     // Obtener las URLs de la siguiente y anterior página
     const nextPage = data?.next;
     const prevPage = data?.previous;
 
+    // Obtener el total de jugadores
+    const totalPlayers = data?.count ?? 0;
+
     // Función para ir a la siguiente página
     const goToNextPage = () => {
         if (nextPage) {
-            setCurrentPage((prevPage) => prevPage + 1);
+            const nextUrl = new URL(nextPage);
+            if (searchTerm) {
+                nextUrl.searchParams.set("search", searchTerm);
+            }
+            setCurrentPageUrl(nextUrl.toString());
         }
     };
 
     // Función para ir a la página anterior
     const goToPrevPage = () => {
         if (prevPage) {
-            setCurrentPage((prevPage) => prevPage - 1);
+            const prevUrl = new URL(prevPage);
+            if (searchTerm) {
+                prevUrl.searchParams.set("search", searchTerm);
+            }
+            setCurrentPageUrl(prevUrl.toString());
         }
     };
 
-    // Selección de jugadores
+    // Función para manejar el cambio en el término de búsqueda
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+
+        setCurrentPageUrl(null); // Reiniciar la paginación
+    };
+
+    // Selección de un jugador
     const handlePlayerSelect = (playerId: number) => {
-        setSelectedPlayers((prevSelected) =>
-            prevSelected.includes(playerId)
-                ? prevSelected.filter((id) => id !== playerId)
-                : [...prevSelected, playerId]
+        setSelectedPlayer((prevSelected) =>
+            prevSelected === playerId ? null : playerId
         );
     };
 
-    // Obtencion de documentos
+    // Obtención de documentos
     const handleDownload = async (type: string) => {
-        for (const playerId of selectedPlayers) {
-            const player = data?.results.find((p) => p.id_jugador === playerId);
+        if (selectedPlayer !== null) {
+            const player = data?.results.find(
+                (p) => p.id_jugador === selectedPlayer
+            );
             if (player) {
                 try {
                     const fileData = await getDocuments(type, player.curp);
                     const blob = new Blob([fileData]);
 
-                    let extension = "pdf"; // Predeterminado
+                    let extension = "pdf";
                     if (type === "foto") {
-                        extension = "jpg"; // Cambiar según el formato real de la foto
+                        extension = "jpg";
                     }
 
                     const link = document.createElement("a");
@@ -96,7 +93,7 @@ export default function PromotionTable() {
                     link.click();
                 } catch (error) {
                     setModalOpt({
-                        message: "Ocurrio un error al obtener el documento",
+                        message: "Ocurrió un error al obtener el documento",
                         isError: true,
                     });
                     setOpenModal(true);
@@ -109,7 +106,6 @@ export default function PromotionTable() {
     return (
         <>
             <div className="mb-5">
-                {/* Input de búsqueda */}
                 <div className="max-w-md mb-4">
                     <div className="mb-2 block">
                         <Label
@@ -122,8 +118,8 @@ export default function PromotionTable() {
                         id="search"
                         addon={<FaSearch />}
                         type="search"
-                        placeholder="Nombre, liga, equipo, fecha registro"
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder="Carnet, nombre, curp, liga, equipo, categoria"
+                        onChange={handleSearchChange}
                     />
                 </div>
 
@@ -132,7 +128,7 @@ export default function PromotionTable() {
                         className="font-bold"
                         color="failure"
                         onClick={() => handleDownload("curp")}
-                        disabled={selectedPlayers.length === 0}
+                        disabled={selectedPlayer === null}
                     >
                         <FaFilePdf className="mr-3 self-center hidden md:block" />
                         Descargar CURP
@@ -141,7 +137,7 @@ export default function PromotionTable() {
                         className="font-bold"
                         color="success"
                         onClick={() => handleDownload("ine")}
-                        disabled={selectedPlayers.length === 0}
+                        disabled={selectedPlayer === null}
                     >
                         <FaIdCard className="mr-3 self-center hidden md:block" />
                         Descargar INE / Acta
@@ -150,7 +146,7 @@ export default function PromotionTable() {
                         className="font-bold"
                         color="purple"
                         onClick={() => handleDownload("foto")}
-                        disabled={selectedPlayers.length === 0}
+                        disabled={selectedPlayer === null}
                     >
                         <FaUserCircle className="mr-3 self-center hidden md:block" />
                         Descargar Foto
@@ -177,37 +173,49 @@ export default function PromotionTable() {
                         <Table.HeadCell>Edad</Table.HeadCell>
                     </Table.Head>
                     <Table.Body className="divide-y text-center">
-                        {paginatedPlayers.map((player) => (
-                            <Table.Row key={player.id_jugador}>
-                                <Table.Cell className="p-4">
-                                    <Checkbox
-                                        value={player.id_jugador}
-                                        checked={selectedPlayers.includes(
-                                            player.id_jugador
-                                        )}
-                                        onChange={() =>
-                                            handlePlayerSelect(
-                                                player.id_jugador
-                                            )
-                                        }
-                                    />
+                        {isFetching ? (
+                            <Table.Row>
+                                <Table.Cell
+                                    colSpan={9}
+                                    className="text-center py-4"
+                                >
+                                    Cargando...
                                 </Table.Cell>
-                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                    {player.carnet}
-                                </Table.Cell>
-                                <Table.Cell>{player.nombre}</Table.Cell>
-                                <Table.Cell>{player.curp}</Table.Cell>
-                                <Table.Cell>{player.liga}</Table.Cell>
-                                <Table.Cell>{player.equipo}</Table.Cell>
-                                <Table.Cell>{player.categoria}</Table.Cell>
-                                <Table.Cell>{player.fecha_registro}</Table.Cell>
-                                <Table.Cell>
-                                    {player.fecha_nacimiento}
-                                </Table.Cell>
-                                <Table.Cell>{player.edad}</Table.Cell>
                             </Table.Row>
-                        ))}
-                        {paginatedPlayers.length === 0 && (
+                        ) : (
+                            players.map((player) => (
+                                <Table.Row key={player.id_jugador}>
+                                    <Table.Cell className="p-4">
+                                        <Checkbox
+                                            value={player.id_jugador}
+                                            checked={
+                                                selectedPlayer ===
+                                                player.id_jugador
+                                            }
+                                            onChange={() =>
+                                                handlePlayerSelect(
+                                                    player.id_jugador
+                                                )
+                                            }
+                                        />
+                                    </Table.Cell>
+                                    <Table.Cell>{player.carnet}</Table.Cell>
+                                    <Table.Cell>{player.nombre}</Table.Cell>
+                                    <Table.Cell>{player.curp}</Table.Cell>
+                                    <Table.Cell>{player.liga}</Table.Cell>
+                                    <Table.Cell>{player.equipo}</Table.Cell>
+                                    <Table.Cell>{player.categoria}</Table.Cell>
+                                    <Table.Cell>
+                                        {player.fecha_registro}
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        {player.fecha_nacimiento}
+                                    </Table.Cell>
+                                    <Table.Cell>{player.edad}</Table.Cell>
+                                </Table.Row>
+                            ))
+                        )}
+                        {players.length === 0 && !isFetching && (
                             <Table.Row>
                                 <Table.Cell
                                     colSpan={9}
@@ -220,38 +228,31 @@ export default function PromotionTable() {
                     </Table.Body>
                 </Table>
                 {/* Controles de paginación */}
-                {totalPlayers > 0 && (
+                {players.length > 0 && (
                     <div className="flex justify-between items-center p-5">
                         <p className="text-sm">
-                            Mostrando jugadores del{" "}
-                            <span className="font-bold">
-                                {(currentPage - 1) * pageSize + 1}
-                            </span>{" "}
-                            al{" "}
-                            <span className="font-bold">
-                                {Math.min(currentPage * pageSize, totalPlayers)}
-                            </span>{" "}
-                            de un total de{" "}
-                            <span className="font-bold">{totalPlayers}</span>.
+                            Mostrando{" "}
+                            <span className="font-bold">{players.length}</span>{" "}
+                            jugadores de{" "}
+                            <span className="font-bold">{totalPlayers}</span>{" "}
+                            jugadores en total.
                         </p>
                     </div>
                 )}
             </div>
-            {totalPlayers > 0 && (
+            {players.length > 0 && (
                 <div className="flex gap-4 flex-wrap mt-10">
-                    {/* Botón de página anterior */}
                     <Button
                         onClick={goToPrevPage}
-                        disabled={!prevPage}
+                        disabled={!prevPage || isFetching}
                         color="gray"
                         className="font-bold w-full sm:w-auto p-2 text-sm"
                     >
                         Anterior
                     </Button>
-                    {/* Botón de página siguiente */}
                     <Button
                         onClick={goToNextPage}
-                        disabled={!nextPage}
+                        disabled={!nextPage || isFetching}
                         color="gray"
                         className="font-bold w-full sm:w-auto p-2 text-sm"
                     >

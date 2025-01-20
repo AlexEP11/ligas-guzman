@@ -1,9 +1,26 @@
 import { isAxiosError } from "axios";
 import api from "../services/axios";
 
-export async function getPlayersTables() {
+export async function getPlayersTables(
+    url: string | null = null,
+    searchTerm: string = ""
+) {
     try {
-        const { data } = await api.get(`/jugadores/`);
+        // Construir la query de búsqueda si se proporciona un término
+        const searchQuery = searchTerm
+            ? `search=${encodeURIComponent(searchTerm)}`
+            : "";
+
+        // Si la URL base ya tiene parámetros (ej. `?page=2`), se debe usar `&` para concatenar
+        const finalUrl = url
+            ? searchQuery
+                ? url.includes("?") // Si ya tiene parámetros, añadir con "&"
+                    ? `${url}&${searchQuery}`
+                    : `${url}?${searchQuery}`
+                : url
+            : `/jugadores/` + (searchQuery ? `?${searchQuery}` : ""); // Si no hay URL base, añadir la búsqueda
+
+        const { data } = await api.get(finalUrl);
         return data;
     } catch (error) {
         let errorMessage =
