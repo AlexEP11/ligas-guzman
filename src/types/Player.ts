@@ -39,7 +39,7 @@ export type TableInfoPlayer = {
     nombre: string;
 };
 
-export type PlayerPromo = {
+export type PlayerTable = {
     id_jugador: number;
     curp: string;
     nombre: string;
@@ -49,4 +49,12 @@ export type PlayerPromo = {
     liga: string;
     categoria: string;
     fecha_nacimiento: string;
+    edad: number;
+};
+
+export type PlayersResponseTable = {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: PlayerTable[];
 };

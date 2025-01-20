@@ -1,13 +1,20 @@
-import { Table, TextInput, Label, Checkbox, Button } from "flowbite-react";
-import { getAllPlayersPromo, getDocuments } from "@/api/promo/PromoTable";
+import { getDocuments, getPlayersTables } from "@/api/promo/PromoTable";
 import { FaUserCircle } from "react-icons/fa";
-import { PlayerPromo } from "@/types/Player";
+import { PlayersResponseTable } from "@/types/Player";
 import { FaFilePdf } from "react-icons/fa6";
 import { FaIdCard } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ModalToast } from "../common/ModalToast";
+import {
+    Table,
+    TextInput,
+    Label,
+    Checkbox,
+    Button,
+    Pagination,
+} from "flowbite-react";
 
 export default function PromotionTable() {
     const [selectedPlayers, setSelectedPlayers] = useState<number[]>([]);
@@ -17,13 +24,19 @@ export default function PromotionTable() {
     // Estado para el término de búsqueda
     const [searchTerm, setSearchTerm] = useState("");
 
-    const { data } = useQuery<PlayerPromo[]>({
-        queryFn: getAllPlayersPromo,
+    // Estado para la paginación
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 100;
+
+    const { data } = useQuery<PlayersResponseTable>({
+        queryFn: getPlayersTables,
         queryKey: ["promotoriaAll"],
     });
 
-    // Filtrado de jugadores basado en la búsqueda
-    const filteredPlayers = (data || []).filter(
+    const players = data?.results ?? [];
+
+    // Filtrar jugadores
+    const filteredPlayers = players.filter(
         (player) =>
             player.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             player.liga?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -32,6 +45,23 @@ export default function PromotionTable() {
                 ?.toLowerCase()
                 .includes(searchTerm.toLowerCase())
     );
+
+    // Calcular los datos paginados
+    const totalPlayers = filteredPlayers.length;
+    const totalPages =
+        totalPlayers > 0 ? Math.ceil(totalPlayers / pageSize) : 1; // Asegura que totalPages sea al menos 1
+    const paginatedPlayers =
+        totalPlayers > 0
+            ? filteredPlayers.slice(
+                  (currentPage - 1) * pageSize,
+                  currentPage * pageSize
+              )
+            : [];
+
+    // Cambiar página
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
 
     // Selección de jugadores
     const handlePlayerSelect = (playerId: number) => {
@@ -45,7 +75,7 @@ export default function PromotionTable() {
     // Obtencion de documentos
     const handleDownload = async (type: string) => {
         for (const playerId of selectedPlayers) {
-            const player = data?.find((p) => p.id_jugador === playerId);
+            const player = data?.results.find((p) => p.id_jugador === playerId);
             if (player) {
                 try {
                     const fileData = await getDocuments(type, player.curp);
@@ -140,9 +170,10 @@ export default function PromotionTable() {
                         <Table.HeadCell>Categoria</Table.HeadCell>
                         <Table.HeadCell>Fecha De Registro</Table.HeadCell>
                         <Table.HeadCell>Fecha De Nacimiento</Table.HeadCell>
+                        <Table.HeadCell>Edad</Table.HeadCell>
                     </Table.Head>
                     <Table.Body className="divide-y text-center">
-                        {filteredPlayers.map((player) => (
+                        {paginatedPlayers.map((player) => (
                             <Table.Row key={player.id_jugador}>
                                 <Table.Cell className="p-4">
                                     <Checkbox
@@ -169,9 +200,10 @@ export default function PromotionTable() {
                                 <Table.Cell>
                                     {player.fecha_nacimiento}
                                 </Table.Cell>
+                                <Table.Cell>{player.edad}</Table.Cell>
                             </Table.Row>
                         ))}
-                        {filteredPlayers.length === 0 && (
+                        {paginatedPlayers.length === 0 && (
                             <Table.Row>
                                 <Table.Cell
                                     colSpan={9}
@@ -183,13 +215,31 @@ export default function PromotionTable() {
                         )}
                     </Table.Body>
                 </Table>
-                <p className="text-sm p-5">
-                    Mostrando{" "}
-                    <span className="font-bold">
-                        {filteredPlayers?.length || 0}
-                    </span>{" "}
-                    jugadores
-                </p>
+
+                {/* Controles de paginación */}
+                {totalPlayers > 0 && (
+                    <div className="flex justify-between items-center p-5">
+                        <p className="text-sm">
+                            Mostrando jugadores{" "}
+                            <span className="font-bold">
+                                {(currentPage - 1) * pageSize + 1}
+                            </span>{" "}
+                            a{" "}
+                            <span className="font-bold">
+                                {Math.min(currentPage * pageSize, totalPlayers)}
+                            </span>{" "}
+                            de <span className="font-bold">{totalPlayers}</span>
+                            .
+                        </p>
+                        <Pagination
+                            currentPage={currentPage}
+                            layout="navigation"
+                            onPageChange={handlePageChange}
+                            showIcons
+                            totalPages={totalPages}
+                        />
+                    </div>
+                )}
             </div>
             <ModalToast
                 modalOpt={modalOpt}
