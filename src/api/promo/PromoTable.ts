@@ -1,9 +1,9 @@
 import { isAxiosError } from "axios";
 import api from "../services/axios";
 
-export async function getAllPlayersPromo() {
+export async function getPlayersTables() {
     try {
-        const { data } = await api.get("/general/");
+        const { data } = await api.get(`/jugadores/`);
         return data;
     } catch (error) {
         let errorMessage =
