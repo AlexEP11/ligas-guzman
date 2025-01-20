@@ -7,14 +7,7 @@ import { FaSearch } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ModalToast } from "@/components/common/ModalToast";
-import {
-    Table,
-    TextInput,
-    Label,
-    Checkbox,
-    Button,
-    Pagination,
-} from "flowbite-react";
+import { Table, TextInput, Label, Checkbox, Button } from "flowbite-react";
 
 export default function TableTeams() {
     const [selectedPlayers, setSelectedPlayers] = useState<number[]>([]);
@@ -47,8 +40,7 @@ export default function TableTeams() {
 
     // Calcular los datos paginados
     const totalPlayers = filteredPlayers.length;
-    const totalPages =
-        totalPlayers > 0 ? Math.ceil(totalPlayers / pageSize) : 1; // Asegura que totalPages sea al menos 1
+
     const paginatedPlayers =
         totalPlayers > 0
             ? filteredPlayers.slice(
@@ -57,9 +49,22 @@ export default function TableTeams() {
               )
             : [];
 
-    // Cambiar página
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
+    // Obtener las URLs de la siguiente y anterior página
+    const nextPage = data?.next;
+    const prevPage = data?.previous;
+
+    // Función para ir a la siguiente página
+    const goToNextPage = () => {
+        if (nextPage) {
+            setCurrentPage((prevPage) => prevPage + 1);
+        }
+    };
+
+    // Función para ir a la página anterior
+    const goToPrevPage = () => {
+        if (prevPage) {
+            setCurrentPage((prevPage) => prevPage - 1);
+        }
     };
 
     // Selección de jugadores
@@ -212,32 +217,46 @@ export default function TableTeams() {
                         )}
                     </Table.Body>
                 </Table>
-
                 {/* Controles de paginación */}
                 {totalPlayers > 0 && (
                     <div className="flex justify-between items-center p-5">
                         <p className="text-sm">
-                            Mostrando jugadores{" "}
+                            Mostrando jugadores del{" "}
                             <span className="font-bold">
                                 {(currentPage - 1) * pageSize + 1}
                             </span>{" "}
-                            a{" "}
+                            al{" "}
                             <span className="font-bold">
                                 {Math.min(currentPage * pageSize, totalPlayers)}
                             </span>{" "}
-                            de <span className="font-bold">{totalPlayers}</span>
-                            .
+                            de un total de{" "}
+                            <span className="font-bold">{totalPlayers}</span>.
                         </p>
-                        <Pagination
-                            currentPage={currentPage}
-                            layout="navigation"
-                            onPageChange={handlePageChange}
-                            showIcons
-                            totalPages={totalPages}
-                        />
                     </div>
                 )}
             </div>
+            {totalPlayers > 0 && (
+                <div className="flex gap-4 flex-wrap mt-10">
+                    {/* Botón de página anterior */}
+                    <Button
+                        onClick={goToPrevPage}
+                        disabled={!prevPage}
+                        color="gray"
+                        className="font-bold w-full sm:w-auto p-2 text-sm"
+                    >
+                        Anterior
+                    </Button>
+                    {/* Botón de página siguiente */}
+                    <Button
+                        onClick={goToNextPage}
+                        disabled={!nextPage}
+                        color="gray"
+                        className="font-bold w-full sm:w-auto p-2 text-sm"
+                    >
+                        Siguiente
+                    </Button>
+                </div>
+            )}
             <ModalToast
                 modalOpt={modalOpt}
                 openModal={openModal}
